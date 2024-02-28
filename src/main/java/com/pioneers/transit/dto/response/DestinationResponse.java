@@ -8,6 +8,7 @@ import lombok.*;
 @AllArgsConstructor
 @NoArgsConstructor
 public class DestinationResponse {
+    private String id;
     private String name;
     private String description;
     private String location;

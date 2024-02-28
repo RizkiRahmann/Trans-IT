@@ -4,6 +4,7 @@ import com.pioneers.transit.dto.request.DestinationRequest;
 import com.pioneers.transit.dto.response.BuildResponse;
 import com.pioneers.transit.dto.response.ControllerResponse;
 import com.pioneers.transit.dto.response.DestinationResponse;
+import com.pioneers.transit.dto.response.PageResponseWrapper;
 import com.pioneers.transit.service.DestinationService;
 import com.pioneers.transit.utils.constant.ApiUrlConstant;
 import com.pioneers.transit.utils.constant.ConstMessage;
@@ -39,9 +40,9 @@ public class DestinationController {
                                     @RequestParam(name = "direction", defaultValue = "ASC") String direction){
         Sort sort = Sort.by(Sort.Direction.fromString(direction), sortBy);
         Pageable pageable = PageRequest.of(page, size, sort);
-        Page<DestinationResponse> destinationResponses = destinationService.getAll(pageable);
-//        PageResponseWrapper<Customer> customerPageResponseWrapper = new PageResponseWrapper<>(custPage);
-        ControllerResponse<Page<DestinationResponse>> response = buildResponse.response(destinationResponses, ConstStatus.STATUS_OK, entity, ConstMessage.M_GET);
+        PageResponseWrapper<DestinationResponse> destinationResponses = destinationService.getAll(pageable);
+        ControllerResponse<PageResponseWrapper<DestinationResponse>> response = buildResponse
+                .response(destinationResponses, ConstStatus.STATUS_OK, entity, ConstMessage.M_GET);
         return ResponseEntity.ok(response);
     }
 

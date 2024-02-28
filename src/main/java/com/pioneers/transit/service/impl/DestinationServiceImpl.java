@@ -34,11 +34,12 @@ public class DestinationServiceImpl implements DestinationService {
     }
 
     @Override
-    public Page<DestinationResponse> getAll(Pageable pageable) {
+    public PageResponseWrapper<DestinationResponse> getAll(Pageable pageable) {
         Page<Destination> destinations = destinationRepository.findAll(pageable);
         List<DestinationResponse> destinationResponses = destinations.getContent().stream()
                 .map(DestinationServiceImpl::toDestinationResponse).toList();
-        return new PageImpl<>(destinationResponses,pageable,destinations.getTotalElements());
+        PageImpl<DestinationResponse> responses = new PageImpl<>(destinationResponses, pageable, destinations.getTotalElements());
+        return new PageResponseWrapper<>(responses);
     }
 
     @Override
@@ -59,6 +60,7 @@ public class DestinationServiceImpl implements DestinationService {
 
     private static DestinationResponse toDestinationResponse(Destination destination){
         return DestinationResponse.builder()
+                .id(destination.getId())
                 .name(destination.getName())
                 .description(destination.getDescription())
                 .price(destination.getPrice())

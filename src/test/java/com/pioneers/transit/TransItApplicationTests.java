@@ -1,4 +1,4 @@
-package com.transit.TransIT;
+package com.pioneers.transit;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;

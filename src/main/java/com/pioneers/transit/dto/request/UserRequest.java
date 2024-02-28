@@ -1,8 +1,7 @@
-package com.pioneers.transit.dto.response;
+package com.pioneers.transit.dto.request;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.pioneers.transit.entity.UserCredential;
-import jakarta.persistence.OneToOne;
 import lombok.*;
 
 import java.sql.Date;
@@ -12,7 +11,7 @@ import java.sql.Date;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class UserResponse {
+public class UserRequest {
     private String username;
     private String name;
     @JsonFormat(pattern = "yyyy-MM-dd")

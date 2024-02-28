@@ -1,7 +1,7 @@
 package com.pioneers.transit.service.impl;
 
 import com.pioneers.transit.dto.request.AuthRequest;
-import com.pioneers.transit.dto.response.UserResponse;
+import com.pioneers.transit.dto.response.UserCredentialResponse;
 import com.pioneers.transit.entity.Role;
 import com.pioneers.transit.entity.UserCredential;
 import com.pioneers.transit.repository.UserCredentialRepository;
@@ -52,7 +52,7 @@ public class AuthServiceImpl implements AuthService {
     }
 
     @Override
-    public UserResponse register(AuthRequest request) {
+    public UserCredentialResponse register(AuthRequest request) {
         // buat role
         Role roleCustomer = roleService.getOrSave(ERole.ROLE_CUSTOMER);
 
@@ -71,7 +71,7 @@ public class AuthServiceImpl implements AuthService {
     }
 
     @Override
-    public UserResponse registerAdmin(AuthRequest request) {
+    public UserCredentialResponse registerAdmin(AuthRequest request) {
         // buat role
         Role roleCustomer = roleService.getOrSave(ERole.ROLE_CUSTOMER);
         Role roleAdmin = roleService.getOrSave(ERole.ROLE_ADMIN);
@@ -89,9 +89,9 @@ public class AuthServiceImpl implements AuthService {
         return toUserReponse(userCredential);
     }
 
-    private static UserResponse toUserReponse(UserCredential userCredential){
+    private static UserCredentialResponse toUserReponse(UserCredential userCredential){
         List<String> roles = userCredential.getRoles().stream().map(role -> role.getRole().name()).toList();
-        return UserResponse.builder()
+        return UserCredentialResponse.builder()
                 .email(userCredential.getEmail())
                 .roles(roles)
                 .build();

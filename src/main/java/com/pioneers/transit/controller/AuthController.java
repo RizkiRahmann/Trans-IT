@@ -3,7 +3,7 @@ package com.pioneers.transit.controller;
 import com.pioneers.transit.dto.request.AuthRequest;
 import com.pioneers.transit.dto.response.BuildResponse;
 import com.pioneers.transit.dto.response.ControllerResponse;
-import com.pioneers.transit.dto.response.UserResponse;
+import com.pioneers.transit.dto.response.UserCredentialResponse;
 import com.pioneers.transit.service.AuthService;
 import com.pioneers.transit.utils.constant.ApiUrlConstant;
 import com.pioneers.transit.utils.constant.ConstStatus;
@@ -23,15 +23,15 @@ public class AuthController {
 
     @PostMapping("/register")
     public ResponseEntity<?> register(@RequestBody AuthRequest request){
-        UserResponse userResponse = authService.register(request);
-        ControllerResponse<UserResponse> response = buildResponse.response(userResponse, ConstStatus.STATUS_CREATE, "User", "Successfully Register New %s");
+        UserCredentialResponse userCredentialResponse = authService.register(request);
+        ControllerResponse<UserCredentialResponse> response = buildResponse.response(userCredentialResponse, ConstStatus.STATUS_CREATE, "User", "Successfully Register New %s");
         return ResponseEntity.ok(response);
     }
 
     @PostMapping("/register/admin")
     public ResponseEntity<?> registerAdmin(@RequestBody AuthRequest request){
-        UserResponse userResponse = authService.registerAdmin(request);
-        ControllerResponse<UserResponse> response = buildResponse.response(userResponse, ConstStatus.STATUS_CREATE, "Admin", "Successfully Register New %s");
+        UserCredentialResponse userCredentialResponse = authService.registerAdmin(request);
+        ControllerResponse<UserCredentialResponse> response = buildResponse.response(userCredentialResponse, ConstStatus.STATUS_CREATE, "Admin", "Successfully Register New %s");
         return ResponseEntity.ok(response);
     }
 

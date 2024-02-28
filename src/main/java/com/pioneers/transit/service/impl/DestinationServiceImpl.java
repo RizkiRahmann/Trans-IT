@@ -18,7 +18,7 @@ import java.util.stream.Stream;
 @Service
 @RequiredArgsConstructor
 public class DestinationServiceImpl implements DestinationService {
-    private DestinationRepository destinationRepository;
+    private final DestinationRepository destinationRepository;
 
     @Override
     public DestinationResponse create(DestinationRequest request) {

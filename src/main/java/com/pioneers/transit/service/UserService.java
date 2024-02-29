@@ -1,15 +1,17 @@
 package com.pioneers.transit.service;
 
-import com.pioneers.transit.entity.UserCredential;
-import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import com.pioneers.transit.dto.request.UserRequest;
+import com.pioneers.transit.dto.response.PageResponseWrapper;
+import com.pioneers.transit.dto.response.UserResponse;
+import com.pioneers.transit.entity.User;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 
 public interface UserService {
-    UserCredential loadByUserId(String userId);
+    UserResponse create(UserRequest request);
+    PageResponseWrapper<UserResponse> getAll(Pageable pageable);
+    UserResponse getById(String id);
+    UserResponse update(UserRequest request);
+    void deleteById(String id);
 
-    //username
-    UserCredential loadByUsername(String username) throws UsernameNotFoundException;
-
-    //email
-    UserDetails loadUserByUsername(String email)throws UsernameNotFoundException;
 }

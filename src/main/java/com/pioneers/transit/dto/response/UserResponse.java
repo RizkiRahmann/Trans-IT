@@ -13,6 +13,7 @@ import java.sql.Date;
 @AllArgsConstructor
 @NoArgsConstructor
 public class UserResponse {
+    private String id;
     private String username;
     private String name;
     @JsonFormat(pattern = "yyyy-MM-dd")

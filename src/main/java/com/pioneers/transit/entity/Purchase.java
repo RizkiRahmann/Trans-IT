@@ -5,6 +5,8 @@ import lombok.*;
 import org.springframework.data.annotation.CreatedDate;
 
 import java.sql.Timestamp;
+import java.util.ArrayList;
+import java.util.List;
 
 @NoArgsConstructor
 @AllArgsConstructor
@@ -21,8 +23,10 @@ public class Purchase {
     private Timestamp purchaseDate;
 
     @ManyToOne
+    @JoinColumn(name = "user_id")
     private User user;
 
-    //log_id
+    @OneToMany(mappedBy = "purchase")
+    private List<Log> logs = new ArrayList<>();
 
 }

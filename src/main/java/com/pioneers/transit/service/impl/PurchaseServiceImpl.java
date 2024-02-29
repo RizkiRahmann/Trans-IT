@@ -1,15 +1,20 @@
 package com.pioneers.transit.service.impl;
 
+import com.pioneers.transit.dto.request.LogRequest;
 import com.pioneers.transit.dto.request.PurchaseRequest;
 import com.pioneers.transit.dto.response.PageResponseWrapper;
 import com.pioneers.transit.dto.response.PurchaseResponse;
+import com.pioneers.transit.entity.Log;
 import com.pioneers.transit.entity.Purchase;
 import com.pioneers.transit.repository.PurchaseRepository;
+import com.pioneers.transit.service.LogService;
 import com.pioneers.transit.service.PurchaseService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
 
@@ -17,11 +22,25 @@ import java.util.List;
 @RequiredArgsConstructor
 public class PurchaseServiceImpl implements PurchaseService {
     private final PurchaseRepository purchaseRepository;
+    private final LogService logService;
 
     @Override
     public PurchaseResponse create(PurchaseRequest request) {
         Purchase purchase = build(request);
         purchaseRepository.save(purchase);
+        for (Log log : purchase.getLogs()){
+            log.getPurchase();// error
+            if (log.getTicketQuantity()<1) throw new ResponseStatusException(HttpStatus.FORBIDDEN,"Stock tidak ada");
+            log.setTicketQuantity(log.getTicketQuantity()-1);
+            LogRequest logRequest = LogRequest.builder()
+                    .id(log.getId())
+                    .ticketQuantity(log.getTicketQuantity())
+                    .price(log.getPrice())
+                    .purchase(log.getPurchase())
+                    .bus(log.getBus())
+                    .build();
+            logService.saveLog(logRequest);
+        }
         return toResponse(purchase);
     }
 
@@ -31,7 +50,7 @@ public class PurchaseServiceImpl implements PurchaseService {
         List<PurchaseResponse> responseList = purchasePage.getData().stream()
                 .map(PurchaseServiceImpl::toResponse).toList();
         PageImpl<PurchaseResponse> responses = new PageImpl<>(responseList,pageable,purchasePage.getTotalElements());
-        return null;
+        return new PageResponseWrapper<>(responses);
     }
 
     @Override

@@ -7,6 +7,7 @@ import com.pioneers.transit.dto.response.UserCredentialResponse;
 import com.pioneers.transit.service.AuthService;
 import com.pioneers.transit.utils.constant.ApiUrlConstant;
 import com.pioneers.transit.utils.constant.ConstStatus;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;

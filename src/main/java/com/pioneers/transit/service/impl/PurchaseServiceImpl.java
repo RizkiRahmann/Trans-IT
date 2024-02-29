@@ -43,7 +43,7 @@ public class PurchaseServiceImpl implements PurchaseService {
                 .logs(request.getLogs())
                 .build();
         Purchase purchaseSave = purchaseRepository.save(purchase);
-        for (Log log : purchase.getLogs()){
+        for (Log log : request.getLogs()){
             log.setPurchase(purchaseSave);
             Bus bus = busRepository.findById(log.getBus().getId()).orElseThrow(null);
             if (bus.getChair() < 1 || bus.getChair()-log.getTicketQuantity()<0) throw new ResponseStatusException(HttpStatus.FORBIDDEN,"Kursi penuh");
@@ -58,7 +58,7 @@ public class PurchaseServiceImpl implements PurchaseService {
                     .build();
             logService.saveLog(logRequest);
         }
-        return toResponse(purchase);
+        return toResponse(purchaseSave);
     }
 
     @Override
@@ -77,6 +77,7 @@ public class PurchaseServiceImpl implements PurchaseService {
     }
 
     @Override
+    @Transactional
     public PurchaseResponse update(PurchaseRequest request) {return create(request);}
 
     @Override
@@ -90,6 +91,7 @@ public class PurchaseServiceImpl implements PurchaseService {
                 .id(purchase.getId())
                 .purchaseDate(purchase.getPurchaseDate())
                 .user(purchase.getUser())
+                .logs(purchase.getLogs())
                 .build();
     }
 }

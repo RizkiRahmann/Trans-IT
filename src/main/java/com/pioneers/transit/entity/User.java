@@ -29,7 +29,7 @@ public class User {
     @OneToOne
     private UserCredential userCredentiall;
 
-    @CreatedDate
-    private Timestamp createdAt;
+//    @CreatedDate
+//    private Timestamp createdAt;
 
 }

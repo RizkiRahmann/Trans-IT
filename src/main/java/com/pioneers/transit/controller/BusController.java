@@ -4,12 +4,15 @@ import com.pioneers.transit.dto.request.BusRequest;
 import com.pioneers.transit.dto.response.BuildResponse;
 import com.pioneers.transit.dto.response.BusResponse;
 import com.pioneers.transit.dto.response.ControllerResponse;
+import com.pioneers.transit.dto.response.PageResponseWrapper;
 import com.pioneers.transit.service.BusService;
 import com.pioneers.transit.utils.constant.ApiUrlConstant;
 import com.pioneers.transit.utils.constant.ConstMessage;
 import com.pioneers.transit.utils.constant.ConstStatus;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -28,8 +31,18 @@ public class BusController {
     }
 
     @GetMapping
-    public ResponseEntity<?> getAll(Pageable pageable){
-        return null;
+    public ResponseEntity<?> getAll(
+            @RequestParam(name = "page", defaultValue = "0") Integer page,
+            @RequestParam(name = "size", defaultValue = "5") Integer size,
+            @RequestParam(name = "sort-by", defaultValue = "name") String sortBy,
+            @RequestParam(name = "direction", defaultValue = "ASC") String direction
+            ){
+        Sort sort = Sort.by(Sort.Direction.fromString(direction),sortBy);
+        Pageable pageable = PageRequest.of(page,size,sort);
+        PageResponseWrapper<BusResponse> responseWrapper  = busService.getAll(pageable);
+        ControllerResponse<PageResponseWrapper<BusResponse>> response =buildResponse
+                .response(responseWrapper,ConstStatus.STATUS_OK,"Bus",ConstMessage.M_GET);
+        return ResponseEntity.ok(response);
     }
 
     @GetMapping("/{id}")

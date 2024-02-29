@@ -7,6 +7,7 @@ import com.pioneers.transit.entity.Bus;
 import com.pioneers.transit.repository.BusRepository;
 import com.pioneers.transit.service.BusService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
@@ -30,7 +31,8 @@ public class BusServiceImpl implements BusService {
         PageResponseWrapper<Bus> busPage = new PageResponseWrapper<>(busRepository.findAll(pageable));
         List<BusResponse> responseList = busPage.getData().stream()
                 .map(BusServiceImpl::toResponse).toList();
-        return null;
+        PageImpl<BusResponse> responses = new PageImpl<>(responseList,pageable,busPage.getTotalElements());
+        return new PageResponseWrapper<>(responses);
     }
 
     @Override

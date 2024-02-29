@@ -3,7 +3,6 @@ package com.pioneers.transit.service;
 import com.pioneers.transit.dto.request.BusRequest;
 import com.pioneers.transit.dto.response.BusResponse;
 import com.pioneers.transit.dto.response.PageResponseWrapper;
-import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
 public interface BusService {

@@ -4,6 +4,7 @@ import com.pioneers.transit.dto.request.DestinationRequest;
 import com.pioneers.transit.dto.request.UserRequest;
 import com.pioneers.transit.dto.response.*;
 import com.pioneers.transit.service.UserService;
+import com.pioneers.transit.specification.user.UserSearchDTO;
 import com.pioneers.transit.utils.constant.ApiUrlConstant;
 import com.pioneers.transit.utils.constant.ConstMessage;
 import com.pioneers.transit.utils.constant.ConstStatus;
@@ -34,10 +35,11 @@ public class UserController {
     public ResponseEntity<?> getAll(@RequestParam(name = "page", defaultValue = "0") Integer page,
                                     @RequestParam(name = "size", defaultValue = "5") Integer size,
                                     @RequestParam(name = "sort-by", defaultValue = "name") String sortBy,
-                                    @RequestParam(name = "direction", defaultValue = "ASC") String direction){
+                                    @RequestParam(name = "direction", defaultValue = "ASC") String direction,
+                                    @ModelAttribute UserSearchDTO userSearchDTO){
         Sort sort = Sort.by(Sort.Direction.fromString(direction), sortBy);
         PageRequest pageRequest = PageRequest.of(page, size, sort);
-        PageResponseWrapper<UserResponse> userResponsePageResponseWrapper = userService.getAll(pageRequest);
+        PageResponseWrapper<UserResponse> userResponsePageResponseWrapper = userService.getAll(pageRequest,userSearchDTO);
         ControllerResponse<PageResponseWrapper<UserResponse>> response = buildResponse.response(userResponsePageResponseWrapper, ConstStatus.STATUS_OK, entity, ConstMessage.M_GET);
         return ResponseEntity.ok(response);
     }

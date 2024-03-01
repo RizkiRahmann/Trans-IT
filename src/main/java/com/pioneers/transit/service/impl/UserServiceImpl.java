@@ -8,10 +8,13 @@ import com.pioneers.transit.entity.UserCredential;
 import com.pioneers.transit.repository.UserCredentialRepository;
 import com.pioneers.transit.repository.UserRepository;
 import com.pioneers.transit.service.UserService;
+import com.pioneers.transit.specification.user.UserSearchDTO;
+import com.pioneers.transit.specification.user.UserSpecification;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -40,8 +43,9 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public PageResponseWrapper<UserResponse> getAll(Pageable pageable) {
-        Page<User> users = userRepository.findAll(pageable);
+    public PageResponseWrapper<UserResponse> getAll(Pageable pageable, UserSearchDTO userSearchDTO) {
+        Specification<User> specification = UserSpecification.getSpecification(userSearchDTO);
+        Page<User> users = userRepository.findAll(specification, pageable);
         List<UserResponse> list = users.getContent().stream().map(UserServiceImpl::toUserResponse).toList();
         PageImpl<UserResponse> userResponses = new PageImpl<>(list, pageable, users.getTotalElements());
         return new PageResponseWrapper<>(userResponses);

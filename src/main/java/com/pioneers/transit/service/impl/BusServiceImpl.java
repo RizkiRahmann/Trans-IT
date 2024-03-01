@@ -6,9 +6,13 @@ import com.pioneers.transit.dto.response.PageResponseWrapper;
 import com.pioneers.transit.entity.Bus;
 import com.pioneers.transit.repository.BusRepository;
 import com.pioneers.transit.service.BusService;
+import com.pioneers.transit.specification.bus.BusSearchDTO;
+import com.pioneers.transit.specification.bus.BusSpecification;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -27,9 +31,10 @@ public class BusServiceImpl implements BusService {
     }
 
     @Override
-    public PageResponseWrapper<BusResponse> getAll(Pageable pageable) {
-        PageResponseWrapper<Bus> busPage = new PageResponseWrapper<>(busRepository.findAll(pageable));
-        List<BusResponse> responseList = busPage.getData().stream()
+    public PageResponseWrapper<BusResponse> getAll(Pageable pageable, BusSearchDTO busSearchDTO) {
+        Specification<Bus> specification = BusSpecification.getSpecification(busSearchDTO);
+        Page<Bus> busPage =busRepository.findAll(specification,pageable);
+        List<BusResponse> responseList = busPage.getContent().stream()
                 .map(BusServiceImpl::toResponse).toList();
         PageImpl<BusResponse> responses = new PageImpl<>(responseList,pageable,busPage.getTotalElements());
         return new PageResponseWrapper<>(responses);

@@ -9,7 +9,7 @@ import lombok.*;
 @Setter
 @Entity
 @Builder
-@Table(name = "bus")
+@Table(name = "m_bus")
 public class Bus {
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)

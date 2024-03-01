@@ -6,6 +6,7 @@ import com.pioneers.transit.dto.response.BusResponse;
 import com.pioneers.transit.dto.response.ControllerResponse;
 import com.pioneers.transit.dto.response.PageResponseWrapper;
 import com.pioneers.transit.service.BusService;
+import com.pioneers.transit.specification.bus.BusSearchDTO;
 import com.pioneers.transit.utils.constant.ApiUrlConstant;
 import com.pioneers.transit.utils.constant.ConstMessage;
 import com.pioneers.transit.utils.constant.ConstStatus;
@@ -36,11 +37,11 @@ public class BusController {
             @RequestParam(name = "page", defaultValue = "0") Integer page,
             @RequestParam(name = "size", defaultValue = "5") Integer size,
             @RequestParam(name = "sort-by", defaultValue = "name") String sortBy,
-            @RequestParam(name = "direction", defaultValue = "ASC") String direction
-            ){
+            @RequestParam(name = "direction", defaultValue = "ASC") String direction,
+            @ModelAttribute BusSearchDTO busSearchDTO){
         Sort sort = Sort.by(Sort.Direction.fromString(direction),sortBy);
-        Pageable pageable = PageRequest.of(page,size,sort);
-        PageResponseWrapper<BusResponse> responseWrapper  = busService.getAll(pageable);
+        PageRequest pageRequest = PageRequest.of(page, size, sort);
+        PageResponseWrapper<BusResponse> responseWrapper  = busService.getAll(pageRequest,busSearchDTO);
         ControllerResponse<PageResponseWrapper<BusResponse>> response =buildResponse
                 .response(responseWrapper,ConstStatus.STATUS_OK,entity,ConstMessage.M_GET);
         return ResponseEntity.ok(response);

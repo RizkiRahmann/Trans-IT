@@ -7,6 +7,7 @@ import com.pioneers.transit.service.UserService;
 import com.pioneers.transit.utils.constant.ApiUrlConstant;
 import com.pioneers.transit.utils.constant.ConstMessage;
 import com.pioneers.transit.utils.constant.ConstStatus;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;

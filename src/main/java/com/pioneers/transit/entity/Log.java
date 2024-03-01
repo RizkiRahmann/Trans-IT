@@ -25,9 +25,9 @@ public class Log {
     //kurang attribute "hotel_id"
     private String bus_id;
 
-    @OneToMany(mappedBy = "log_detail")
+    /*@OneToMany(mappedBy = "log_detail")
     private List<Destination> destinationId = new ArrayList<>();
     @OneToMany(mappedBy = "log_detail")
     private List<Bus> busId = new ArrayList<>();
-
+*/
 }

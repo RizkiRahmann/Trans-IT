@@ -44,7 +44,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public PageResponseWrapper<UserResponse> getAll(Pageable pageable, UserSearchDTO userSearchDTO) {
-        Specification<User> specification = UserSpecification.getSpecification(userSearchDTO);
+        Specification<User> specification = UserSpecification.  getSpecification(userSearchDTO);
         Page<User> users = userRepository.findAll(specification, pageable);
         List<UserResponse> list = users.getContent().stream().map(UserServiceImpl::toUserResponse).toList();
         PageImpl<UserResponse> userResponses = new PageImpl<>(list, pageable, users.getTotalElements());

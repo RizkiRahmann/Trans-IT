@@ -1,7 +1,6 @@
-package com.pioneers.transit.specification.user;
+package com.pioneers.transit.specification.destination;
 
 import com.pioneers.transit.entity.Destination;
-import com.pioneers.transit.entity.User;
 import jakarta.persistence.criteria.Predicate;
 import org.springframework.data.jpa.domain.Specification;
 

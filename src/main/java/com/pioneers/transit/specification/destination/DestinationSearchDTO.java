@@ -1,4 +1,4 @@
-package com.pioneers.transit.specification.user;
+package com.pioneers.transit.specification.destination;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;

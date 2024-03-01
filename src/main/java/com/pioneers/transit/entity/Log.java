@@ -10,13 +10,16 @@ import lombok.*;
 @Setter
 @Entity
 @Builder
-@Table(name = "log")
+@Table(name = "t_log")
 public class Log {
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
     private String id;
     private Integer ticketQuantity;
     private Integer price;
+    private String hotelKey;
+    private String hotelUrl;
+
     @ManyToOne
     @JoinColumn(name = "purchase_id")
     @JsonIgnoreProperties("logs")
@@ -27,4 +30,5 @@ public class Log {
     @ManyToOne
     @JoinColumn(name = "destination_id")
     private Destination destination;
+
 }

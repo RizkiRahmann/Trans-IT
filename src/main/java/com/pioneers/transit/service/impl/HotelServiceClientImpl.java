@@ -1,30 +1,34 @@
 package com.pioneers.transit.service.impl;
 
-import com.pioneers.transit.entity.Hotel;
-import com.pioneers.transit.service.HotelService;
+import com.pioneers.transit.dto.request.HotelRequestClient;
+import com.pioneers.transit.dto.response.HotelResponseClient;
+import com.pioneers.transit.service.HotelServiceClient;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
-import java.util.Arrays;
-import java.util.List;
+import java.util.UUID;
 
 @Service
 @RequiredArgsConstructor
 @Slf4j
-public class HotelServiceImpl implements HotelService {
-    private RestTemplate restTemplate;
+public class HotelServiceClientImpl implements HotelServiceClient {
+    private final RestTemplate restTemplate;
     @Override
-    public List<Hotel> getAll() {
-        ResponseEntity<Hotel[]> response =
-                restTemplate.getForEntity(
-                        "https://jsonplaceholder.typicode.com/photos",
-                        Hotel[].class
-                );
-        log.info("responseee " + response);
-        return Arrays.asList(response.getBody());
+    public HotelResponseClient get(String chkIn, String chkOut, String hotelKey) {
+        ResponseEntity<HotelResponseClient> response = restTemplate.getForEntity(
+                "https://data.xotelo.com/api/rates?chk_in="+chkIn+"&chk_out="+chkOut+"&hotel_key="+hotelKey,
+                HotelResponseClient.class
+        );
+        response.getBody().setId(UUID.randomUUID().toString());
+        return response.getBody();
+    }
+
+    private static HotelResponseClient toHotelClientResponse(HotelRequestClient requestClient){
+        return HotelResponseClient.builder()
+                .result(requestClient.getResult())
+                .build();
     }
 }

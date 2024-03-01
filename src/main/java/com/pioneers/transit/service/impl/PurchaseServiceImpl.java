@@ -36,22 +36,25 @@ public class PurchaseServiceImpl implements PurchaseService {
     @Override
     @Transactional
     public PurchaseResponse create(PurchaseRequest request) {
-        User user = userRepository.findById(request.getUser().getId()).orElseThrow(null);
+        User user = userRepository.findById(request.getUser().getId())
+                .orElseThrow(()->new ResponseStatusException(HttpStatus.NOT_FOUND,"ID User Not Found"));
         Purchase purchase = Purchase.builder()
                 .purchaseDate(request.getPurchaseDate())
                 .user(user)
                 .logs(request.getLogs())
                 .build();
         Purchase purchaseSave = purchaseRepository.save(purchase);
-        for (Log log : request.getLogs()){
+        for (Log log : purchase.getLogs()){
             log.setPurchase(purchaseSave);
-            Bus bus = busRepository.findById(log.getBus().getId()).orElseThrow(null);
-            if (bus.getChair() < 1 || bus.getChair()-log.getTicketQuantity()<0) throw new ResponseStatusException(HttpStatus.FORBIDDEN,"Kursi penuh");
+            Bus bus = busRepository.findById(log.getBus().getId())
+                    .orElseThrow(()->new ResponseStatusException(HttpStatus.NOT_FOUND,"ID Bus Not Found"));
+            if (bus.getChair() < 1 || bus.getChair()-log.getTicketQuantity()<0) throw new ResponseStatusException(HttpStatus.FORBIDDEN,"Full...");
             bus.setChair(bus.getChair()-log.getTicketQuantity());
             LogRequest logRequest = LogRequest.builder()
-                    .id(log.getId())
                     .ticketQuantity(log.getTicketQuantity())
                     .price(log.getPrice())
+                    .hotelKey(log.getHotelKey())
+                    .hotelUrl(log.getHotelUrl())
                     .purchase(log.getPurchase())
                     .destination(log.getDestination())
                     .bus(log.getBus())

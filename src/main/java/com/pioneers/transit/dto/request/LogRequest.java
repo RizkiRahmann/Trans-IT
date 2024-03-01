@@ -11,10 +11,13 @@ import lombok.*;
 @AllArgsConstructor
 @NoArgsConstructor
 public class LogRequest {
-    private String id;
     private Integer ticketQuantity;
     private Integer price;
+    private String hotelKey;
+    private String hotelUrl;
+
     private Purchase purchase;
     private Destination destination;
     private Bus bus;
+
 }

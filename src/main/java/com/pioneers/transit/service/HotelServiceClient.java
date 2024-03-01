@@ -1,9 +1,7 @@
 package com.pioneers.transit.service;
 
-import com.pioneers.transit.entity.Hotel;
+import com.pioneers.transit.dto.response.HotelResponseClient;
 
-import java.util.List;
-
-public interface HotelService {
-    List<Hotel> getAll();
+public interface HotelServiceClient {
+    HotelResponseClient get(String chkIn, String chkOut, String hotelKey);
 }

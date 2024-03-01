@@ -1,6 +1,5 @@
 package com.pioneers.transit.dto.response;
 
-import com.pioneers.transit.entity.ResultHotelClient;
 import lombok.*;
 
 
@@ -9,7 +8,7 @@ import lombok.*;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class HotelResponseClient {
+public class HotelResponseClient<T> {
     private String id;
-    private ResultHotelClient result;
+    private T result;
 }

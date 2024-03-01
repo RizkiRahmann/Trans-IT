@@ -6,10 +6,13 @@ import com.pioneers.transit.dto.response.PageResponseWrapper;
 import com.pioneers.transit.entity.Destination;
 import com.pioneers.transit.repository.DestinationRepository;
 import com.pioneers.transit.service.DestinationService;
+import com.pioneers.transit.specification.destination.DestinationSearchDTO;
+import com.pioneers.transit.specification.destination.DestinationSpecification;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -34,8 +37,9 @@ public class DestinationServiceImpl implements DestinationService {
     }
 
     @Override
-    public PageResponseWrapper<DestinationResponse> getAll(Pageable pageable) {
-        Page<Destination> destinations = destinationRepository.findAll(pageable);
+    public PageResponseWrapper<DestinationResponse> getAll(Pageable pageable, DestinationSearchDTO destinationSearchDTO) {
+        Specification<Destination> specification = DestinationSpecification.getSpecification(destinationSearchDTO);
+        Page<Destination> destinations = destinationRepository.findAll(specification,pageable);
         List<DestinationResponse> destinationResponses = destinations.getContent().stream()
                 .map(DestinationServiceImpl::toDestinationResponse).toList();
         PageImpl<DestinationResponse> responses = new PageImpl<>(destinationResponses, pageable, destinations.getTotalElements());

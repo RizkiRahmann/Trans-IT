@@ -6,6 +6,7 @@ import com.pioneers.transit.dto.response.ControllerResponse;
 import com.pioneers.transit.dto.response.DestinationResponse;
 import com.pioneers.transit.dto.response.PageResponseWrapper;
 import com.pioneers.transit.service.DestinationService;
+import com.pioneers.transit.specification.destination.DestinationSearchDTO;
 import com.pioneers.transit.utils.constant.ApiUrlConstant;
 import com.pioneers.transit.utils.constant.ConstMessage;
 import com.pioneers.transit.utils.constant.ConstStatus;
@@ -38,10 +39,11 @@ public class DestinationController {
     public ResponseEntity<?> getAll(@RequestParam(name = "page", defaultValue = "0") Integer page,
                                     @RequestParam(name = "size", defaultValue = "5") Integer size,
                                     @RequestParam(name = "sort-by", defaultValue = "name") String sortBy,
-                                    @RequestParam(name = "direction", defaultValue = "ASC") String direction){
+                                    @RequestParam(name = "direction", defaultValue = "ASC") String direction,
+                                    @ModelAttribute DestinationSearchDTO destinationSearchDTO){
         Sort sort = Sort.by(Sort.Direction.fromString(direction), sortBy);
         Pageable pageable = PageRequest.of(page, size, sort);
-        PageResponseWrapper<DestinationResponse> destinationResponses = destinationService.getAll(pageable);
+        PageResponseWrapper<DestinationResponse> destinationResponses = destinationService.getAll(pageable,destinationSearchDTO);
         ControllerResponse<PageResponseWrapper<DestinationResponse>> response = buildResponse
                 .response(destinationResponses, ConstStatus.STATUS_OK, entity, ConstMessage.M_GET);
         return ResponseEntity.ok(response);

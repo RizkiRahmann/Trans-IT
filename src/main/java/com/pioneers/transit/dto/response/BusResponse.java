@@ -10,6 +10,6 @@ import lombok.*;
 public class BusResponse {
     private String id;
     private String name;
-    private String chair;
+    private Integer chair;
     private Integer price;
 }

@@ -27,7 +27,6 @@ public class UserServiceImpl implements UserService {
     public UserResponse create(UserRequest request) {
         UserCredential userCredentialId = userCredentialRepository.findById(request.getUserCredentiall().getId())
                 .orElseThrow(null);
-
         User user = User.builder()
                 .username(request.getUsername())
                 .name(request.getName())

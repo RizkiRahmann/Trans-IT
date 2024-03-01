@@ -9,6 +9,6 @@ import lombok.*;
 @NoArgsConstructor
 public class BusRequest {
     private String name;
-    private String chair;
+    private Integer chair;
     private Integer price;
 }

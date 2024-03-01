@@ -1,11 +1,8 @@
 package com.pioneers.transit.entity;
 
-
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
 import lombok.*;
-
-import java.util.ArrayList;
-import java.util.List;
 
 @NoArgsConstructor
 @AllArgsConstructor
@@ -13,21 +10,21 @@ import java.util.List;
 @Setter
 @Entity
 @Builder
-@Table(name = "log_detail")
+@Table(name = "log")
 public class Log {
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
     private String id;
-    private Integer ticket_quantity;
+    private Integer ticketQuantity;
     private Integer price;
-    private String purchase_id;
-    private String destination_id;
-    //kurang attribute "hotel_id"
-    private String bus_id;
-
-    /*@OneToMany(mappedBy = "log_detail")
-    private List<Destination> destinationId = new ArrayList<>();
-    @OneToMany(mappedBy = "log_detail")
-    private List<Bus> busId = new ArrayList<>();
-*/
+    @ManyToOne
+    @JoinColumn(name = "purchase_id")
+    @JsonIgnoreProperties("logs")
+    private Purchase purchase;
+    @ManyToOne
+    @JoinColumn(name = "bus_id")
+    private Bus bus;
+    @ManyToOne
+    @JoinColumn(name = "destination_id")
+    private Destination destination;
 }

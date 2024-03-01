@@ -7,6 +7,8 @@ import org.springframework.data.annotation.CreatedDate;
 
 import java.sql.Date;
 import java.sql.Timestamp;
+import java.util.ArrayList;
+import java.util.List;
 
 @NoArgsConstructor
 @AllArgsConstructor
@@ -14,22 +16,19 @@ import java.sql.Timestamp;
 @Setter
 @Entity
 @Builder
-@Table(name = "user")
-public class User {
+@Table(name = "t_purchase")
+public class Purchase {
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
     private String id;
-    private String username;
-    private String name;
     @JsonFormat(pattern = "yyyy-MM-dd")
-    private Date birthDate;
-    private String address;
-    private String phoneNumber;
+    private Date purchaseDate;
 
-    @OneToOne
-    private UserCredential userCredentiall;
+    @ManyToOne
+    @JoinColumn(name = "user_id")
+    private User user;
 
-//    @CreatedDate
-//    private Timestamp createdAt;
+    @OneToMany(mappedBy = "purchase")
+    private List<Log> logs = new ArrayList<>();
 
 }

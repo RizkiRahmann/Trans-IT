@@ -15,6 +15,6 @@ public class Bus {
     @GeneratedValue(strategy = GenerationType.UUID)
     private String id;
     private String name;
-    private String chair;
+    private Integer chair;
     private Integer price;
 }

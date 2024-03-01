@@ -5,10 +5,8 @@ import com.pioneers.transit.dto.response.LogResponse;
 import com.pioneers.transit.dto.response.PageResponseWrapper;
 import org.springframework.data.domain.Pageable;
 
+
 public interface LogService {
-    LogResponse create(LogRequest request);
-    PageResponseWrapper<LogResponse> getAll(Pageable pageable);
-    LogResponse getById(String id);
-    LogResponse update(LogRequest request);
-    void delete(String id);
+    LogResponse saveLog(LogRequest request);
+    PageResponseWrapper<LogResponse> getLog(Pageable pageable);
 }

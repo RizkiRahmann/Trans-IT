@@ -1,14 +1,18 @@
 package com.pioneers.transit.service.impl;
 
 import com.pioneers.transit.dto.request.LogRequest;
-import com.pioneers.transit.dto.response.ControllerResponse;
 import com.pioneers.transit.dto.response.LogResponse;
 import com.pioneers.transit.dto.response.PageResponseWrapper;
+import com.pioneers.transit.entity.Bus;
+import com.pioneers.transit.entity.Destination;
 import com.pioneers.transit.entity.Log;
+import com.pioneers.transit.repository.BusRepository;
+import com.pioneers.transit.repository.DestinationRepository;
 import com.pioneers.transit.repository.LogRepository;
+import com.pioneers.transit.service.BusService;
+import com.pioneers.transit.service.DestinationService;
 import com.pioneers.transit.service.LogService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -17,55 +21,43 @@ import java.util.List;
 
 @Service
 @RequiredArgsConstructor
-public class LogServiceImpl implements LogService{
+public class LogServiceImpl implements LogService {
     private final LogRepository logRepository;
+    private final DestinationRepository destinationRepository;
+    private final BusRepository busRepository;
 
     @Override
-    public LogResponse create(LogRequest request) {
+    public LogResponse saveLog(LogRequest request) {
+        Destination destination = destinationRepository.findById(request.getDestination().getId()).orElseThrow(null);
+        Bus bus = busRepository.findById(request.getBus().getId()).orElseThrow(null);
         Log log = Log.builder()
-                .ticket_quantity(request.getTicket_quantity())
-                .price(request.getPrice())
-                .purchase_id(request.getPurchase_id())
-                .destination_id(request.getDestination_id())
-                .bus_id(request.getBus_id())
+                .ticketQuantity(request.getTicketQuantity())
+                .price(destination.getPrice()+bus.getPrice())
+                .purchase(request.getPurchase())
+                .destination(destination)
+                .bus(bus)
                 .build();
         logRepository.save(log);
-        return toLogResponse(log);
+        return toResponse(log);
     }
 
     @Override
-    public PageResponseWrapper<LogResponse> getAll(Pageable pageable) {
-        Page<Log> logs = logRepository.findAll(pageable);
-        List<LogResponse> logResponses = logs.getContent().stream()
-                .map(LogServiceImpl::toLogResponse).toList();
-        PageImpl<LogResponse> responses = new PageImpl<>(logResponses, pageable, logs.getTotalElements());
+    public PageResponseWrapper<LogResponse> getLog(Pageable pageable) {
+        PageResponseWrapper<Log> logPage = new PageResponseWrapper<>(logRepository.findAll(pageable));
+        List<LogResponse> responseList = logPage.getData().stream()
+                .map(LogServiceImpl::toResponse).toList();
+        PageImpl<LogResponse> responses = new PageImpl<>(responseList,pageable, logPage.getTotalElements());
         return new PageResponseWrapper<>(responses);
     }
 
-    @Override
-    public LogResponse getById(String id) {
-        Log log = logRepository.findById(id).orElseThrow(null);
-        return toLogResponse(log);
-    }
-
-    @Override
-    public LogResponse update(LogRequest request) {
-        return create(request);
-    }
-
-    @Override
-    public void delete(String id) {
-        logRepository.deleteById(id);
-    }
-
-    private static LogResponse toLogResponse(Log log){
+    private static LogResponse toResponse(Log log){
         return LogResponse.builder()
                 .id(log.getId())
-                .ticket_quantity(log.getTicket_quantity())
+                .ticketQuantity(log.getTicketQuantity())
                 .price(log.getPrice())
-                .purchase_id(log.getPurchase_id())
-                .destination_id(log.getDestination_id())
-                .bus_id(log.getBus_id())
+                .purchase(log.getPurchase())
+                .destination(log.getDestination())
+                .bus(log.getBus())
                 .build();
     }
 }

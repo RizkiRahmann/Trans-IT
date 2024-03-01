@@ -9,7 +9,6 @@ import com.pioneers.transit.service.BusService;
 import com.pioneers.transit.utils.constant.ApiUrlConstant;
 import com.pioneers.transit.utils.constant.ConstMessage;
 import com.pioneers.transit.utils.constant.ConstStatus;
-import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -23,11 +22,12 @@ import org.springframework.web.bind.annotation.*;
 public class BusController {
     private final BusService busService;
     private final BuildResponse buildResponse;
+    private final String entity="Bus";
 
     @PostMapping
     public ResponseEntity<?> createBus(@RequestBody BusRequest busRequest){
         BusResponse busResponse = busService.create(busRequest);
-        ControllerResponse<BusResponse> response = buildResponse.response(busResponse, ConstStatus.STATUS_CREATE,"Bus", ConstMessage.M_CREATE);
+        ControllerResponse<BusResponse> response = buildResponse.response(busResponse, ConstStatus.STATUS_CREATE,entity, ConstMessage.M_CREATE);
         return ResponseEntity.ok(response);
     }
 
@@ -42,28 +42,28 @@ public class BusController {
         Pageable pageable = PageRequest.of(page,size,sort);
         PageResponseWrapper<BusResponse> responseWrapper  = busService.getAll(pageable);
         ControllerResponse<PageResponseWrapper<BusResponse>> response =buildResponse
-                .response(responseWrapper,ConstStatus.STATUS_OK,"Bus",ConstMessage.M_GET);
+                .response(responseWrapper,ConstStatus.STATUS_OK,entity,ConstMessage.M_GET);
         return ResponseEntity.ok(response);
     }
 
     @GetMapping("/{id}")
     public ResponseEntity<?> getById(@PathVariable String id){
         BusResponse busResponse = busService.getById(id);
-        ControllerResponse<BusResponse> response = buildResponse.response(busResponse, ConstStatus.STATUS_OK, "Bus",ConstMessage.M_GET);
+        ControllerResponse<BusResponse> response = buildResponse.response(busResponse, ConstStatus.STATUS_OK, entity,ConstMessage.M_GET);
         return ResponseEntity.ok(response);
     }
 
     @PutMapping
     public ResponseEntity<?> updateBus(@RequestBody BusRequest busRequest){
         BusResponse busResponse = busService.update(busRequest);
-        ControllerResponse<BusResponse> response = buildResponse.response(busResponse, ConstStatus.STATUS_CREATE,"Bus", ConstMessage.M_UPDATE);
+        ControllerResponse<BusResponse> response = buildResponse.response(busResponse, ConstStatus.STATUS_CREATE,entity, ConstMessage.M_UPDATE);
         return ResponseEntity.ok(response);
     }
 
     @DeleteMapping("/{id}")
     public ResponseEntity<?> deleteBus(@PathVariable String id){
         busService.delete(id);
-        ControllerResponse<String> response = buildResponse.response("Data berhasil dihapus",ConstStatus.STATUS_OK,"Bus",ConstMessage.M_DELETE);
+        ControllerResponse<String> response = buildResponse.response("Data berhasil dihapus",ConstStatus.STATUS_OK,entity,ConstMessage.M_DELETE);
         return ResponseEntity.ok(response);
     }
 }

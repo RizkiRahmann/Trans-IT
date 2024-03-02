@@ -3,6 +3,7 @@ package com.pioneers.transit.controller;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.pioneers.transit.dto.request.AuthRequest;
+import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
@@ -19,6 +20,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.
 
 @SpringBootTest
 @AutoConfigureMockMvc
+@Slf4j
 class AuthControllerTest {
     @Autowired
     private MockMvc mockMvc;
@@ -60,11 +62,13 @@ class AuthControllerTest {
 
         String body = "{\"email\":\"" + email + "\", \"password\":\"" + password + "\"}";
 
-        mockMvc.perform(
+        MvcResult result = mockMvc.perform(
                 post("/auth/login")
                         .accept(MediaType.APPLICATION_JSON)
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(body)
-        ).andExpect(status().isOk());
+        ).andExpect(status().isOk()).andReturn();
+        String token = result.getResponse().getContentAsString();
+        log.info("TOKEN " + token);
     }
 }

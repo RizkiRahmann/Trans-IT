@@ -68,8 +68,17 @@ public class UserServiceImpl implements UserService {
     @Override
     public UserResponse update(UserRequest request) {
         validationService.validate(request);
-        User user = userRepository.findById(request.getId()).orElseThrow(null);
-        return create(request);
+        User user = userRepository.findById(request.getId())
+                .orElseThrow(()->new ResponseStatusException(HttpStatus.NOT_FOUND, "Id User NOT FOUND"));
+
+        user.setUsername(request.getUsername());
+        user.setName(request.getName());
+        user.setBirthDate(request.getBirthDate());
+        user.setAddress(request.getAddress());
+        user.setPhoneNumber(request.getPhoneNumber());
+        userRepository.save(user);
+
+        return toUserResponse(user);
     }
 
     @Override

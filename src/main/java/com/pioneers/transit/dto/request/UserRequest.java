@@ -15,7 +15,6 @@ import java.sql.Date;
 @AllArgsConstructor
 @NoArgsConstructor
 public class UserRequest {
-    @JsonIgnore
     @Size(max = 100)
     private String id;
     @NotBlank

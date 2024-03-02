@@ -13,7 +13,6 @@ import lombok.*;
 @AllArgsConstructor
 @NoArgsConstructor
 public class DestinationRequest {
-    @JsonIgnore
     @Size(max = 100)
     private String id;
     @NotBlank

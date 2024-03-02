@@ -14,7 +14,9 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
 import java.util.stream.Stream;
@@ -58,7 +60,13 @@ public class DestinationServiceImpl implements DestinationService {
     @Override
     public DestinationResponse update(DestinationRequest request) {
         validationService.validate(request);
-        Destination destination = destinationRepository.findById(request.getId()).orElseThrow(null);
+        Destination destination = destinationRepository.findById(request.getId())
+                .orElseThrow(()->new ResponseStatusException(HttpStatus.NOT_FOUND, "Id destination NOT FOUND"));
+        destination.setName(request.getName());
+        destination.setDescription(request.getDescription());
+        destination.setLocation(request.getLocation());
+        destination.setPrice(request.getPrice());
+        destination.setRating(request.getRating());
         return create(request);
     }
 

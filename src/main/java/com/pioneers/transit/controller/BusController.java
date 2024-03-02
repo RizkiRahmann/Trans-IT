@@ -14,6 +14,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -29,7 +30,7 @@ public class BusController {
     public ResponseEntity<?> createBus(@RequestBody BusRequest busRequest){
         BusResponse busResponse = busService.create(busRequest);
         ControllerResponse<BusResponse> response = buildResponse.response(busResponse, ConstStatus.STATUS_CREATE,entity, ConstMessage.M_CREATE);
-        return ResponseEntity.ok(response);
+        return ResponseEntity.status(HttpStatus.CREATED).body(response);
     }
 
     @GetMapping
@@ -58,7 +59,7 @@ public class BusController {
     public ResponseEntity<?> updateBus(@RequestBody BusRequest busRequest){
         BusResponse busResponse = busService.update(busRequest);
         ControllerResponse<BusResponse> response = buildResponse.response(busResponse, ConstStatus.STATUS_CREATE,entity, ConstMessage.M_UPDATE);
-        return ResponseEntity.ok(response);
+        return ResponseEntity.status(HttpStatus.CREATED).body(response);
     }
 
     @DeleteMapping("/{id}")

@@ -16,13 +16,12 @@ import lombok.*;
 @AllArgsConstructor
 @NoArgsConstructor
 public class LogRequest {
-    @JsonIgnore
     @Size(max = 100)
     private String id;
     @NotNull
     @Min(value = 1)
     private Integer ticketQuantity;
-    @NotNull
+    @Min(value = 0)
     private Integer price;
     @NotBlank
     private String hotelKey;

@@ -4,6 +4,7 @@ import com.pioneers.transit.dto.request.BusRequest;
 import com.pioneers.transit.dto.response.BusResponse;
 import com.pioneers.transit.dto.response.PageResponseWrapper;
 import com.pioneers.transit.entity.Bus;
+import com.pioneers.transit.entity.User;
 import com.pioneers.transit.repository.BusRepository;
 import com.pioneers.transit.service.BusService;
 import com.pioneers.transit.service.ValidationService;
@@ -15,7 +16,9 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
 
@@ -54,8 +57,13 @@ public class BusServiceImpl implements BusService {
     @Override
     public BusResponse update(BusRequest request) {
         validationService.validate(request);
-        Bus bus = busRepository.findById(request.getId()).orElseThrow(null);
-        return create(request);
+        Bus bus = busRepository.findById(request.getId())
+                .orElseThrow(()->new ResponseStatusException(HttpStatus.NOT_FOUND, "Id User NOT FOUND"));
+        bus.setChair(request.getChair());
+        bus.setName(request.getName());
+        bus.setPrice(request.getPrice());
+        busRepository.save(bus);
+        return toResponse(bus);
     }
 
     @Override

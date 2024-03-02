@@ -19,7 +19,6 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 public class PurchaseRequest {
-    @JsonIgnore
     @Size(max = 100)
     private String id;
     @JsonFormat(pattern = "yyyy-MM-dd")

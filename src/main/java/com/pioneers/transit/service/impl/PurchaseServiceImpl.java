@@ -83,8 +83,11 @@ public class PurchaseServiceImpl implements PurchaseService {
     @Transactional
     public PurchaseResponse update(PurchaseRequest request) {
         validationService.validate(request);
-        Purchase purchase = purchaseRepository.findById(request.getId()).orElseThrow(null);
-        return create(request);
+        Purchase purchase = purchaseRepository.findById(request.getId())
+                .orElseThrow(()->new ResponseStatusException(HttpStatus.NOT_FOUND, "Id purchase NOT FOUND"));
+        purchase.setPurchaseDate(request.getPurchaseDate());
+        purchaseRepository.save(purchase);
+        return toResponse(purchase);
     }
 
     @Override

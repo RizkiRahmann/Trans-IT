@@ -11,25 +11,29 @@ import com.pioneers.transit.service.UserService;
 import com.pioneers.transit.specification.user.UserSearchDTO;
 import com.pioneers.transit.specification.user.UserSpecification;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
 import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
+@Slf4j
 public class UserServiceImpl implements UserService {
     private final UserRepository userRepository;
     private final UserCredentialRepository userCredentialRepository;
 
     @Override
     public UserResponse create(UserRequest request) {
-        UserCredential userCredentialId = userCredentialRepository.findById(request.getUserCredentiall().getId())
-                .orElseThrow(null);
+        UserCredential userCredentialId = userCredentialRepository.findById(request.getUserCredential().getId())
+                .orElseThrow(()->new ResponseStatusException(HttpStatus.NOT_FOUND,"ID UserCredential Not Found"));
         User user = User.builder()
                 .username(request.getUsername())
                 .name(request.getName())

@@ -12,7 +12,7 @@ public class BusSpecification {
         return ((root, query, criteriaBuilder) -> {
             List<Predicate> predicates = new ArrayList<>();
             if (busSearchDTO.getBusName()!= null){
-                predicates.add(criteriaBuilder.equal(root.get("name"),busSearchDTO.getBusName()));
+                predicates.add(criteriaBuilder.like(root.get("name"),"%"+busSearchDTO.getBusName()+"%"));
             }
             if (busSearchDTO.getBusChair()!=null){
                 predicates.add(criteriaBuilder.equal(root.get("chair"),busSearchDTO.getBusChair()));

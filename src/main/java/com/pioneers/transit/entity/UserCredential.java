@@ -1,5 +1,6 @@
 package com.pioneers.transit.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.*;
 import org.springframework.security.core.GrantedAuthority;
@@ -22,6 +23,7 @@ public class UserCredential implements UserDetails {
     private String id;
     @Column(unique = true)
     private String email;
+    @JsonIgnore
     private String password;
 
     @ManyToMany(fetch = FetchType.EAGER)

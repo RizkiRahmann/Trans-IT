@@ -12,16 +12,16 @@ public class UserSpecification {
         return ((root, query, criteriaBuilder) -> {
             List<Predicate> predicates = new ArrayList<>();
             if (userSearchDTO.getUserUsername()!=null){
-                predicates.add(criteriaBuilder.equal(root.get("username"),userSearchDTO.getUserUsername()));
+                predicates.add(criteriaBuilder.like(root.get("username"),"%"+userSearchDTO.getUserUsername()+"%"));
             }
             if (userSearchDTO.getUserName()!=null){
-                predicates.add(criteriaBuilder.equal(root.get("name"),userSearchDTO.getUserName()));
+                predicates.add(criteriaBuilder.like(root.get("name"),"%"+userSearchDTO.getUserName()+"%"));
             }
             if (userSearchDTO.getUserAddress()!=null){
-                predicates.add(criteriaBuilder.equal(root.get("address"),userSearchDTO.getUserAddress()));
+                predicates.add(criteriaBuilder.like(root.get("address"),"%"+userSearchDTO.getUserAddress()+"%"));
             }
             if (userSearchDTO.getUserPhoneNumber()!=null){
-                predicates.add(criteriaBuilder.equal(root.get("phoneNumber"),userSearchDTO.getUserPhoneNumber()));
+                predicates.add(criteriaBuilder.like(root.get("phoneNumber"),"%"+userSearchDTO.getUserPhoneNumber()+"%"));
             }
             Predicate[] predicates1 = predicates.toArray(new Predicate[predicates.size()]);
             return criteriaBuilder.and(predicates1);

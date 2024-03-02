@@ -18,5 +18,5 @@ public class UserRequest {
     private Date birthDate;
     private String address;
     private String phoneNumber;
-    private UserCredential userCredentiall;
+    private UserCredential userCredential;
 }

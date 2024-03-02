@@ -15,6 +15,7 @@ import com.pioneers.transit.repository.UserRepository;
 import com.pioneers.transit.service.BusService;
 import com.pioneers.transit.service.LogService;
 import com.pioneers.transit.service.PurchaseService;
+import com.pioneers.transit.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;

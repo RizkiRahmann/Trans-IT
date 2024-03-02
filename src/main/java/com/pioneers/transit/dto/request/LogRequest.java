@@ -17,7 +17,6 @@ import lombok.*;
 @NoArgsConstructor
 public class LogRequest {
     @JsonIgnore
-    @NotBlank
     @Size(max = 100)
     private String id;
     @NotNull
@@ -29,11 +28,8 @@ public class LogRequest {
     private String hotelKey;
     @NotBlank
     private String hotelUrl;
-    @NotBlank
     private Purchase purchase;
-    @NotBlank
     private Destination destination;
-    @NotBlank
     private Bus bus;
 
 }

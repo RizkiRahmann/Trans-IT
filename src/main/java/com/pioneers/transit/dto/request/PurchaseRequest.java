@@ -20,12 +20,10 @@ import java.util.List;
 @NoArgsConstructor
 public class PurchaseRequest {
     @JsonIgnore
-    @NotBlank
     @Size(max = 100)
     private String id;
     @JsonFormat(pattern = "yyyy-MM-dd")
     private Date purchaseDate;
-    @NotBlank
     private User user;
     private List<Log> logs;
 }

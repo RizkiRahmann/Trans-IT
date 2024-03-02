@@ -11,7 +11,6 @@ import lombok.*;
 @NoArgsConstructor
 public class BusRequest {
     @JsonIgnore
-    @NotBlank
     @Size(max = 100)
     private String id;
     @NotBlank

@@ -14,7 +14,6 @@ import lombok.*;
 @NoArgsConstructor
 public class DestinationRequest {
     @JsonIgnore
-    @NotBlank
     @Size(max = 100)
     private String id;
     @NotBlank

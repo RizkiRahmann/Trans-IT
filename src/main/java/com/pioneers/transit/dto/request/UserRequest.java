@@ -16,7 +16,6 @@ import java.sql.Date;
 @NoArgsConstructor
 public class UserRequest {
     @JsonIgnore
-    @NotBlank
     @Size(max = 100)
     private String id;
     @NotBlank
@@ -31,6 +30,5 @@ public class UserRequest {
     @NotBlank
     @Size(min = 12,max = 13)
     private String phoneNumber;
-    @NotBlank
     private UserCredential userCredential;
 }

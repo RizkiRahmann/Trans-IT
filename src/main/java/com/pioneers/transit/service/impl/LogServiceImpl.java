@@ -9,13 +9,16 @@ import com.pioneers.transit.entity.Log;
 import com.pioneers.transit.repository.BusRepository;
 import com.pioneers.transit.repository.DestinationRepository;
 import com.pioneers.transit.repository.LogRepository;
-import com.pioneers.transit.service.BusService;
-import com.pioneers.transit.service.DestinationService;
 import com.pioneers.transit.service.LogService;
+import com.pioneers.transit.service.ValidationService;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
 
@@ -25,14 +28,21 @@ public class LogServiceImpl implements LogService {
     private final LogRepository logRepository;
     private final DestinationRepository destinationRepository;
     private final BusRepository busRepository;
+    private final ValidationService validationService;
 
     @Override
+    @Transactional
     public LogResponse saveLog(LogRequest request) {
-        Destination destination = destinationRepository.findById(request.getDestination().getId()).orElseThrow(null);
-        Bus bus = busRepository.findById(request.getBus().getId()).orElseThrow(null);
+        validationService.validate(request);
+        Destination destination = destinationRepository.findById(request.getDestination().getId())
+                .orElseThrow(()->new ResponseStatusException(HttpStatus.NOT_FOUND,"ID Destination Not Found"));
+        Bus bus = busRepository.findById(request.getBus().getId())
+                .orElseThrow(()->new ResponseStatusException(HttpStatus.NOT_FOUND,"ID Bus Not Found"));
         Log log = Log.builder()
                 .ticketQuantity(request.getTicketQuantity())
                 .price(destination.getPrice()+bus.getPrice())
+                .hotelKey(request.getHotelKey())
+                .hotelUrl(request.getHotelUrl())
                 .purchase(request.getPurchase())
                 .destination(destination)
                 .bus(bus)
@@ -58,6 +68,8 @@ public class LogServiceImpl implements LogService {
                 .purchase(log.getPurchase())
                 .destination(log.getDestination())
                 .bus(log.getBus())
+                .hotelKey(log.getHotelKey())
+                .hotelUrl(log.getHotelUrl())
                 .build();
     }
 }

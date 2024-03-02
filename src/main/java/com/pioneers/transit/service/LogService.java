@@ -3,6 +3,7 @@ package com.pioneers.transit.service;
 import com.pioneers.transit.dto.request.LogRequest;
 import com.pioneers.transit.dto.response.LogResponse;
 import com.pioneers.transit.dto.response.PageResponseWrapper;
+import com.pioneers.transit.entity.Log;
 import org.springframework.data.domain.Pageable;
 
 

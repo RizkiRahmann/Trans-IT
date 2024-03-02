@@ -13,4 +13,6 @@ public class DestinationSearchDTO {
     private String destinationName;
     private String destinationDescription;
     private String destinationLocation;
+    private Integer price;
+    private Long rating;
 }

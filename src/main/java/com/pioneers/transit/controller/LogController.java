@@ -5,6 +5,7 @@ import com.pioneers.transit.dto.response.BuildResponse;
 import com.pioneers.transit.dto.response.ControllerResponse;
 import com.pioneers.transit.dto.response.LogResponse;
 import com.pioneers.transit.dto.response.PageResponseWrapper;
+import com.pioneers.transit.entity.Log;
 import com.pioneers.transit.service.LogService;
 import com.pioneers.transit.utils.constant.ApiUrlConstant;
 import com.pioneers.transit.utils.constant.ConstMessage;
@@ -24,7 +25,7 @@ public class LogController {
     private final String entity="log";
 
     @PostMapping
-    public ResponseEntity<?> saveLog(@RequestParam LogRequest logRequest){
+    public ResponseEntity<?> saveLog(@RequestBody LogRequest logRequest){
         LogResponse logResponse = logService.saveLog(logRequest);
         ControllerResponse<LogResponse> response = buildResponse.response(logResponse, ConstStatus.STATUS_CREATE,entity, ConstMessage.M_CREATE);
         return ResponseEntity.ok(response);

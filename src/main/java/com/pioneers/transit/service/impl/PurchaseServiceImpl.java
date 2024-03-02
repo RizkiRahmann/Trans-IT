@@ -12,9 +12,7 @@ import com.pioneers.transit.entity.User;
 import com.pioneers.transit.repository.BusRepository;
 import com.pioneers.transit.repository.PurchaseRepository;
 import com.pioneers.transit.repository.UserRepository;
-import com.pioneers.transit.service.BusService;
-import com.pioneers.transit.service.LogService;
-import com.pioneers.transit.service.PurchaseService;
+import com.pioneers.transit.service.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
@@ -32,26 +30,31 @@ public class PurchaseServiceImpl implements PurchaseService {
     private final LogService logService;
     private final BusRepository busRepository;
     private final UserRepository userRepository;
+    private final ValidationService validationService;
 
     @Override
     @Transactional
     public PurchaseResponse create(PurchaseRequest request) {
-        User user = userRepository.findById(request.getUser().getId()).orElseThrow(null);
+        validationService.validate(request);
+        User user = userRepository.findById(request.getUser().getId())
+                .orElseThrow(()->new ResponseStatusException(HttpStatus.NOT_FOUND,"ID User Not Found"));
         Purchase purchase = Purchase.builder()
                 .purchaseDate(request.getPurchaseDate())
                 .user(user)
                 .logs(request.getLogs())
                 .build();
         Purchase purchaseSave = purchaseRepository.save(purchase);
-        for (Log log : request.getLogs()){
+        for (Log log : purchase.getLogs()){
             log.setPurchase(purchaseSave);
-            Bus bus = busRepository.findById(log.getBus().getId()).orElseThrow(null);
-            if (bus.getChair() < 1 || bus.getChair()-log.getTicketQuantity()<0) throw new ResponseStatusException(HttpStatus.FORBIDDEN,"Kursi penuh");
+            Bus bus = busRepository.findById(log.getBus().getId())
+                    .orElseThrow(()->new ResponseStatusException(HttpStatus.NOT_FOUND,"ID Bus Not Found"));
+            if (bus.getChair() < 1 || bus.getChair()-log.getTicketQuantity()<0) throw new ResponseStatusException(HttpStatus.FORBIDDEN,"Full...");
             bus.setChair(bus.getChair()-log.getTicketQuantity());
             LogRequest logRequest = LogRequest.builder()
-                    .id(log.getId())
                     .ticketQuantity(log.getTicketQuantity())
                     .price(log.getPrice())
+                    .hotelKey(log.getHotelKey())
+                    .hotelUrl(log.getHotelUrl())
                     .purchase(log.getPurchase())
                     .destination(log.getDestination())
                     .bus(log.getBus())
@@ -78,7 +81,11 @@ public class PurchaseServiceImpl implements PurchaseService {
 
     @Override
     @Transactional
-    public PurchaseResponse update(PurchaseRequest request) {return create(request);}
+    public PurchaseResponse update(PurchaseRequest request) {
+        validationService.validate(request);
+        Purchase purchase = purchaseRepository.findById(request.getId()).orElseThrow(null);
+        return create(request);
+    }
 
     @Override
     public void delete(String id) {

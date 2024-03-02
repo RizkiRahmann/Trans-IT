@@ -34,6 +34,7 @@ class PurchaseControllerTest {
         String json = """
                 {
                   "purchaseDate": "2024-2-1",
+                  "payment": "DANA",
                   "user": {
                     "id":"%s"
                   },
@@ -92,7 +93,8 @@ class PurchaseControllerTest {
         String json = """
                 {
                   "id": "%s",
-                  "purchaseDate": "2020-12-1"
+                  "purchaseDate": "2020-12-1",
+                  "payment": "OVO"
                 }
                 """.formatted(purchaseId);
         mockMvc.perform(

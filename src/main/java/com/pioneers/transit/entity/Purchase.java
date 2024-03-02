@@ -24,6 +24,9 @@ public class Purchase {
     @JsonFormat(pattern = "yyyy-MM-dd")
     private Date purchaseDate;
 
+    @OneToOne
+    private Payment payment;
+
     @ManyToOne
     @JoinColumn(name = "user_id")
     private User user;

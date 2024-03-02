@@ -8,6 +8,7 @@ import io.swagger.v3.oas.annotations.info.Info;
 import io.swagger.v3.oas.annotations.info.License;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.security.SecurityScheme;
+import io.swagger.v3.oas.annotations.servers.Server;
 
 @OpenAPIDefinition(
         info  = @Info(
@@ -24,6 +25,12 @@ import io.swagger.v3.oas.annotations.security.SecurityScheme;
                 ),
                 termsOfService = "Term of service"
         ),
+        servers = {
+                @Server(
+                        description = "Trans-IT",
+                        url = "Local"
+                )
+        },
         security = {
                 @SecurityRequirement(
                         name = "bearerAuth"

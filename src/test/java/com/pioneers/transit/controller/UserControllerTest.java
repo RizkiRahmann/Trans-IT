@@ -56,7 +56,7 @@ class UserControllerTest {
     @Test
     void createUserSuccess() throws Exception {
         UserCredential userCredential = userCredentialRepository.findById("fe6baee9-3c3a-4867-858f-d70c46df8d1d")
-                .orElseThrow(null);
+                .git orElseThrow(null);
         UserRequest request = new UserRequest();
         request.setUsername("chiteki");
         request.setName("Rizki");

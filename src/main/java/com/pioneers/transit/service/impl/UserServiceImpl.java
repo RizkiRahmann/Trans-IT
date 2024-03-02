@@ -38,15 +38,23 @@ public class UserServiceImpl implements UserService {
 
         UserCredential userCredentialId = userCredentialRepository.findById(request.getUserCredential().getId())
                 .orElseThrow(()->new ResponseStatusException(HttpStatus.NOT_FOUND,"ID UserCredential Not Found"));
-        User user = User.builder()
-                .username(request.getUsername())
-                .name(request.getName())
-                .birthDate(request.getBirthDate())
-                .address(request.getAddress())
-                .phoneNumber(request.getPhoneNumber())
-                .userCredentiall(userCredentialId)
-                .build();
+//        User user = User.builder()
+//                .username(request.getUsername())
+//                .name(request.getName())
+//                .birthDate(request.getBirthDate())
+//                .address(request.getAddress())
+//                .phoneNumber(request.getPhoneNumber())
+//                .userCredentiall(userCredentialId)
+//                .build();
+        User user = new User();
+        user.setUsername(request.getUsername());
+        user.setName(request.getName());
+        user.setBirthDate(request.getBirthDate());
+        user.setAddress(request.getAddress());
+        user.setPhoneNumber(request.getPhoneNumber());
+        user.setUserCredentiall(userCredentialId);
         userRepository.save(user);
+
         return toUserResponse(user);
     }
 

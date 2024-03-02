@@ -12,10 +12,7 @@ import com.pioneers.transit.entity.User;
 import com.pioneers.transit.repository.BusRepository;
 import com.pioneers.transit.repository.PurchaseRepository;
 import com.pioneers.transit.repository.UserRepository;
-import com.pioneers.transit.service.BusService;
-import com.pioneers.transit.service.LogService;
-import com.pioneers.transit.service.PurchaseService;
-import com.pioneers.transit.service.UserService;
+import com.pioneers.transit.service.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
@@ -33,10 +30,12 @@ public class PurchaseServiceImpl implements PurchaseService {
     private final LogService logService;
     private final BusRepository busRepository;
     private final UserRepository userRepository;
+    private final ValidationService validationService;
 
     @Override
     @Transactional
     public PurchaseResponse create(PurchaseRequest request) {
+        validationService.validate(request);
         User user = userRepository.findById(request.getUser().getId())
                 .orElseThrow(()->new ResponseStatusException(HttpStatus.NOT_FOUND,"ID User Not Found"));
         Purchase purchase = Purchase.builder()
@@ -82,7 +81,11 @@ public class PurchaseServiceImpl implements PurchaseService {
 
     @Override
     @Transactional
-    public PurchaseResponse update(PurchaseRequest request) {return create(request);}
+    public PurchaseResponse update(PurchaseRequest request) {
+        validationService.validate(request);
+        Purchase purchase = purchaseRepository.findById(request.getId()).orElseThrow(null);
+        return create(request);
+    }
 
     @Override
     public void delete(String id) {

@@ -6,6 +6,7 @@ import com.pioneers.transit.dto.response.PageResponseWrapper;
 import com.pioneers.transit.entity.Destination;
 import com.pioneers.transit.repository.DestinationRepository;
 import com.pioneers.transit.service.DestinationService;
+import com.pioneers.transit.service.ValidationService;
 import com.pioneers.transit.specification.destination.DestinationSearchDTO;
 import com.pioneers.transit.specification.destination.DestinationSpecification;
 import lombok.RequiredArgsConstructor;
@@ -22,9 +23,11 @@ import java.util.stream.Stream;
 @RequiredArgsConstructor
 public class DestinationServiceImpl implements DestinationService {
     private final DestinationRepository destinationRepository;
+    private final ValidationService validationService;
 
     @Override
     public DestinationResponse create(DestinationRequest request) {
+        validationService.validate(request);
         Destination responseDestination = Destination.builder()
                 .name(request.getName())
                 .description(request.getDescription())
@@ -54,6 +57,8 @@ public class DestinationServiceImpl implements DestinationService {
 
     @Override
     public DestinationResponse update(DestinationRequest request) {
+        validationService.validate(request);
+        Destination destination = destinationRepository.findById(request.getId()).orElseThrow(null);
         return create(request);
     }
 

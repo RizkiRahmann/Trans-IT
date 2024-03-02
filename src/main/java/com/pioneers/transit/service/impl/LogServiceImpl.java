@@ -10,6 +10,7 @@ import com.pioneers.transit.repository.BusRepository;
 import com.pioneers.transit.repository.DestinationRepository;
 import com.pioneers.transit.repository.LogRepository;
 import com.pioneers.transit.service.LogService;
+import com.pioneers.transit.service.ValidationService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.PageImpl;
@@ -27,10 +28,12 @@ public class LogServiceImpl implements LogService {
     private final LogRepository logRepository;
     private final DestinationRepository destinationRepository;
     private final BusRepository busRepository;
+    private final ValidationService validationService;
 
     @Override
     @Transactional
     public LogResponse saveLog(LogRequest request) {
+        validationService.validate(request);
         Destination destination = destinationRepository.findById(request.getDestination().getId())
                 .orElseThrow(()->new ResponseStatusException(HttpStatus.NOT_FOUND,"ID Destination Not Found"));
         Bus bus = busRepository.findById(request.getBus().getId())

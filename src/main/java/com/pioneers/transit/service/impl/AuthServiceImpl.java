@@ -8,6 +8,7 @@ import com.pioneers.transit.repository.UserCredentialRepository;
 import com.pioneers.transit.security.JwtUtils;
 import com.pioneers.transit.service.AuthService;
 import com.pioneers.transit.service.RoleService;
+import com.pioneers.transit.service.ValidationService;
 import com.pioneers.transit.utils.constant.ERole;
 import jakarta.annotation.PostConstruct;
 import lombok.RequiredArgsConstructor;
@@ -29,6 +30,7 @@ public class AuthServiceImpl implements AuthService {
     private final RoleService roleService;
     private final JwtUtils jwtUtils;
     private final AuthenticationManager authenticationManager;
+    private final ValidationService validationService;
 
     @PostConstruct
     public void initSuperAdmin(){
@@ -53,6 +55,7 @@ public class AuthServiceImpl implements AuthService {
 
     @Override
     public UserCredentialResponse register(AuthRequest request) {
+        validationService.validate(request);
         // buat role
         Role roleCustomer = roleService.getOrSave(ERole.ROLE_CUSTOMER);
 
@@ -72,6 +75,7 @@ public class AuthServiceImpl implements AuthService {
 
     @Override
     public UserCredentialResponse registerAdmin(AuthRequest request) {
+        validationService.validate(request);
         // buat role
         Role roleCustomer = roleService.getOrSave(ERole.ROLE_CUSTOMER);
         Role roleAdmin = roleService.getOrSave(ERole.ROLE_ADMIN);
@@ -99,6 +103,7 @@ public class AuthServiceImpl implements AuthService {
 
     @Override
     public String login(AuthRequest request) {
+        validationService.validate(request);
         // Object untuk melakukan authenticate
         Authentication authenticationToken = new UsernamePasswordAuthenticationToken(
                 request.getEmail(), // ambil email -> untuk username

@@ -8,6 +8,7 @@ import com.pioneers.transit.entity.UserCredential;
 import com.pioneers.transit.repository.UserCredentialRepository;
 import com.pioneers.transit.repository.UserRepository;
 import com.pioneers.transit.service.UserService;
+import com.pioneers.transit.service.ValidationService;
 import com.pioneers.transit.specification.user.UserSearchDTO;
 import com.pioneers.transit.specification.user.UserSpecification;
 import lombok.RequiredArgsConstructor;
@@ -29,9 +30,12 @@ import java.util.Optional;
 public class UserServiceImpl implements UserService {
     private final UserRepository userRepository;
     private final UserCredentialRepository userCredentialRepository;
+    private final ValidationService validationService;
 
     @Override
     public UserResponse create(UserRequest request) {
+        validationService.validate(request);
+
         UserCredential userCredentialId = userCredentialRepository.findById(request.getUserCredential().getId())
                 .orElseThrow(()->new ResponseStatusException(HttpStatus.NOT_FOUND,"ID UserCredential Not Found"));
         User user = User.builder()
@@ -63,12 +67,15 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public UserResponse update(UserRequest request) {
+        validationService.validate(request);
+        User user = userRepository.findById(request.getId()).orElseThrow(null);
         return create(request);
     }
 
     @Override
     public void deleteById(String id) {
-        userRepository.deleteById(id);
+        User user = userRepository.findById(id).orElseThrow(null);
+        userRepository.delete(user);
     }
     private static UserResponse toUserResponse(User user){
         return UserResponse.builder()

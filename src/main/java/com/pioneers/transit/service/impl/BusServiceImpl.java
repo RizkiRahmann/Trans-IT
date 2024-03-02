@@ -6,6 +6,7 @@ import com.pioneers.transit.dto.response.PageResponseWrapper;
 import com.pioneers.transit.entity.Bus;
 import com.pioneers.transit.repository.BusRepository;
 import com.pioneers.transit.service.BusService;
+import com.pioneers.transit.service.ValidationService;
 import com.pioneers.transit.specification.bus.BusSearchDTO;
 import com.pioneers.transit.specification.bus.BusSpecification;
 import lombok.RequiredArgsConstructor;
@@ -24,9 +25,11 @@ import java.util.List;
 public class BusServiceImpl implements BusService {
 
     private final BusRepository busRepository;
+    private final ValidationService validationService;
 
     @Override
     public BusResponse create(BusRequest request) {
+        validationService.validate(request);
         Bus bus = buildBus(request);
         busRepository.save(bus);
         return toResponse(bus);
@@ -50,6 +53,8 @@ public class BusServiceImpl implements BusService {
 
     @Override
     public BusResponse update(BusRequest request) {
+        validationService.validate(request);
+        Bus bus = busRepository.findById(request.getId()).orElseThrow(null);
         return create(request);
     }
 

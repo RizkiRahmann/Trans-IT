@@ -42,6 +42,20 @@ class AuthControllerTest {
     }
 
     @Test
+    void registerBadRequest() throws Exception {
+        AuthRequest request = new AuthRequest();
+        request.setEmail("");
+        request.setPassword("");
+
+        mockMvc.perform(
+                post("/auth/register")
+                        .accept(MediaType.APPLICATION_JSON)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(request))
+        ).andExpect(status().isBadRequest());//email dan passwordnya tidak ada
+    }
+
+    @Test
     void registerAdmin() throws Exception {
         AuthRequest request = new AuthRequest();
         request.setEmail("admin9@gmail.com");
@@ -53,6 +67,20 @@ class AuthControllerTest {
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(request))
         ).andExpect(status().isOk());
+    }
+
+    @Test
+    void registerAdminBadRequest() throws Exception {
+        AuthRequest request = new AuthRequest();
+        request.setEmail("");
+        request.setPassword("");
+
+        mockMvc.perform(
+                post("/auth/register/admin")
+                        .accept(MediaType.APPLICATION_JSON)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(request))
+        ).andExpect(status().isBadRequest());//email dan passwordnya tidak ada
     }
 
     @Test
@@ -70,5 +98,19 @@ class AuthControllerTest {
         ).andExpect(status().isOk()).andReturn();
         String token = result.getResponse().getContentAsString();
         log.info("TOKEN " + token);
+    }
+    @Test
+    void loginFailed() throws Exception {
+        String email = "superadmin@gmail.com";
+        String password = "54321";
+
+        String body = "{\"email\":\"" + email + "\", \"password\":\"" + password + "\"}";
+
+        mockMvc.perform(
+                post("/auth/login")
+                        .accept(MediaType.APPLICATION_JSON)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(body)
+        ).andExpect(status().isForbidden());//password yang dimasukkan salah
     }
 }

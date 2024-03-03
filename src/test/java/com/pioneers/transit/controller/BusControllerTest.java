@@ -1,5 +1,6 @@
 package com.pioneers.transit.controller;
 
+import com.pioneers.transit.utils.constant.ApiUrlConstant;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
@@ -27,11 +28,6 @@ class BusControllerTest {
     private MockMvc mockMvc;
 
     private String busId = "e75d7067-858d-4d1b-8d22-9cb2339c030d";
-    private String token = "eyJhbGciOiJIUzUxMiIsInR5cCI6IkpXVCJ9." +
-            "eyJpc3MiOiJ0cmFucy1pdCIsInN1YiI6ImZlNmJhZWU5LTNjM2E" +
-            "tNDg2Ny04NThmLWQ3MGM0NmRmOGQxZCIsImV4cCI6MTcwOTUzODk2" +
-            "MSwicm9sZXMiOlsiUk9MRV9DVVNUT01FUiJdfQ.rc2Wbrmcvt92w" +
-            "uKjiwRULJSr3BgWH_j2KRoZmUcUuiBJGN9x6xNzsj8G_cDwK7pYe2WoNIs46M3af-MYDL1wpQ";
 
     @Test
     void createBus() throws Exception {
@@ -45,7 +41,7 @@ class BusControllerTest {
 
         mockMvc.perform(
                 post("/bus")
-                        .header(HttpHeaders.AUTHORIZATION,"Bearer " + token)
+                        .header(HttpHeaders.AUTHORIZATION,"Bearer " + ApiUrlConstant.TOKEN)
                         .accept(MediaType.APPLICATION_JSON)
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(json)
@@ -58,7 +54,7 @@ class BusControllerTest {
     void getAll() throws Exception {
         mockMvc.perform(
                 get("/bus")
-                        .header(HttpHeaders.AUTHORIZATION,"Bearer " + token)
+                        .header(HttpHeaders.AUTHORIZATION,"Bearer " + ApiUrlConstant.TOKEN)
                         .contentType(MediaType.APPLICATION_JSON)
         ).andExpectAll(
                 status().isOk()
@@ -69,7 +65,7 @@ class BusControllerTest {
     void getById() throws Exception {
         mockMvc.perform(
                 get("/user/"+ busId)
-                        .header(HttpHeaders.AUTHORIZATION,"Bearer " + token)
+                        .header(HttpHeaders.AUTHORIZATION,"Bearer " + ApiUrlConstant.TOKEN)
                         .contentType(MediaType.APPLICATION_JSON)
         ).andExpectAll(
                 status().isOk()
@@ -89,7 +85,7 @@ class BusControllerTest {
 
         mockMvc.perform(
                 put("/bus")
-                        .header(HttpHeaders.AUTHORIZATION,"Bearer " + token)
+                        .header(HttpHeaders.AUTHORIZATION,"Bearer " + ApiUrlConstant.TOKEN)
                         .accept(MediaType.APPLICATION_JSON)
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(json)
@@ -102,7 +98,7 @@ class BusControllerTest {
     void deleteBus() throws Exception {
         mockMvc.perform(
                 delete("/bus/"+ busId)
-                        .header(HttpHeaders.AUTHORIZATION,"Bearer " + token)
+                        .header(HttpHeaders.AUTHORIZATION,"Bearer " + ApiUrlConstant.TOKEN)
                         .contentType(MediaType.APPLICATION_JSON)
         ).andExpectAll(
                 status().isOk()

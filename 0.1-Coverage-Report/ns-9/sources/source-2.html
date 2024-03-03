@@ -1,0 +1,84 @@
+
+
+
+<!DOCTYPE html>
+<html id="htmlId">
+<head>
+  <meta http-equiv="Content-Type" content="text/html;charset=windows-1252"> 
+  <title>Coverage Report > DestinationService</title>
+  <style type="text/css">
+    @import "../../css/coverage.css";
+    @import "../../css/idea.min.css";
+  </style>
+  <script type="text/javascript" src="../../js/highlight.min.js"></script>
+  <script type="text/javascript" src="../../js/highlightjs-line-numbers.min.js"></script>
+</head>
+
+<body>
+<div class="content">
+<div class="breadCrumbs">
+Current scope:     <a href="../../index.html">all classes</a>
+    <span class="separator">|</span>
+    <a href="../index.html">com.pioneers.transit.service</a>
+</div>
+
+<h1>Coverage Summary for Class: DestinationService (com.pioneers.transit.service)</h1>
+
+<table class="coverageStats">
+<tr>
+  <th class="name">Class</th>
+</tr>
+<tr>
+  <td class="name">DestinationService</td>
+</tr>
+
+</table>
+
+<br/>
+<br/>
+
+
+<pre>
+<code class="sourceCode" id="sourceCode">&nbsp;package com.pioneers.transit.service;
+&nbsp;
+&nbsp;import com.pioneers.transit.dto.request.DestinationRequest;
+&nbsp;import com.pioneers.transit.dto.response.DestinationResponse;
+&nbsp;import com.pioneers.transit.dto.response.PageResponseWrapper;
+&nbsp;import com.pioneers.transit.specification.destination.DestinationSearchDTO;
+&nbsp;import org.springframework.data.domain.Page;
+&nbsp;import org.springframework.data.domain.Pageable;
+&nbsp;
+&nbsp;public interface DestinationService {
+&nbsp;    DestinationResponse create(DestinationRequest request);
+&nbsp;    PageResponseWrapper&lt;DestinationResponse&gt; getAll(Pageable pageable, DestinationSearchDTO destinationSearchDTO);
+&nbsp;    DestinationResponse getById(String id);
+&nbsp;    DestinationResponse update(DestinationRequest request);
+&nbsp;    void delete(String id);
+&nbsp;}
+</code>
+</pre>
+</div>
+
+<script type="text/javascript">
+(function() {
+    var msie = false, msie9 = false;
+    /*@cc_on
+      msie = true;
+      @if (@_jscript_version >= 9)
+        msie9 = true;
+      @end
+    @*/
+
+    if (!msie || msie && msie9) {
+      hljs.highlightAll()
+      hljs.initLineNumbersOnLoad();
+    }
+})();
+</script>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2024-03-03 11:02</div>
+</div>
+</body>
+</html>

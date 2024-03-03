@@ -1,5 +1,6 @@
 package com.pioneers.transit.controller;
 
+import com.pioneers.transit.utils.constant.ApiUrlConstant;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
@@ -23,17 +24,14 @@ class PurchaseControllerTest {
     private String userId = "9fed65fd-89ff-4efd-af9a-9aac78360a58";
     private String destinationId = "f95e35ee-e22d-4089-b436-8444bf61d7dc";
     private String busId = "0c66bb8b-edad-48ca-b914-4e54aaae0786";
-    private String token = "eyJhbGciOiJIUzUxMiIsInR5cCI6IkpXVCJ9." +
-            "eyJpc3MiOiJ0cmFucy1pdCIsInN1YiI6ImZlNmJhZWU5LTNjM2E" +
-            "tNDg2Ny04NThmLWQ3MGM0NmRmOGQxZCIsImV4cCI6MTcwOTUzODk2" +
-            "MSwicm9sZXMiOlsiUk9MRV9DVVNUT01FUiJdfQ.rc2Wbrmcvt92w" +
-            "uKjiwRULJSr3BgWH_j2KRoZmUcUuiBJGN9x6xNzsj8G_cDwK7pYe2WoNIs46M3af-MYDL1wpQ";
 
     @Test
     void createPurchase() throws Exception {
         String json = """
                 {
                   "purchaseDate": "2020-2-1",
+                  "chkIn": "2025-03-05",
+                  "chkOut": "2025-03-06",
                   "payment": "DANA",
                   "user": {
                     "id":"%s"
@@ -57,7 +55,7 @@ class PurchaseControllerTest {
                 """.formatted(userId,destinationId,busId);
         mockMvc.perform(
                 post("/purchase")
-                        .header(HttpHeaders.AUTHORIZATION,"Bearer " + token)
+                        .header(HttpHeaders.AUTHORIZATION,"Bearer " + ApiUrlConstant.TOKEN)
                         .accept(MediaType.APPLICATION_JSON)
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(json)
@@ -70,7 +68,7 @@ class PurchaseControllerTest {
     void getAll() throws Exception {
         mockMvc.perform(
                 get("/purchase")
-                        .header(HttpHeaders.AUTHORIZATION,"Bearer " + token)
+                        .header(HttpHeaders.AUTHORIZATION,"Bearer " + ApiUrlConstant.TOKEN)
                         .contentType(MediaType.APPLICATION_JSON)
         ).andExpectAll(
                 status().isOk()
@@ -81,7 +79,7 @@ class PurchaseControllerTest {
     void getPurchaseById() throws Exception {
         mockMvc.perform(
                 get("/purchase/"+ purchaseId)
-                        .header(HttpHeaders.AUTHORIZATION,"Bearer " + token)
+                        .header(HttpHeaders.AUTHORIZATION,"Bearer " + ApiUrlConstant.TOKEN)
                         .contentType(MediaType.APPLICATION_JSON)
         ).andExpectAll(
                 status().isOk()
@@ -99,7 +97,7 @@ class PurchaseControllerTest {
                 """.formatted(purchaseId);
         mockMvc.perform(
                 put("/purchase")
-                        .header(HttpHeaders.AUTHORIZATION,"Bearer " + token)
+                        .header(HttpHeaders.AUTHORIZATION,"Bearer " + ApiUrlConstant.TOKEN)
                         .accept(MediaType.APPLICATION_JSON)
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(json)
@@ -112,7 +110,7 @@ class PurchaseControllerTest {
     void deletePurchase() throws Exception {
         mockMvc.perform(
                 delete("/purchase/"+ purchaseId)
-                        .header(HttpHeaders.AUTHORIZATION,"Bearer " + token)
+                        .header(HttpHeaders.AUTHORIZATION,"Bearer " + ApiUrlConstant.TOKEN)
                         .contentType(MediaType.APPLICATION_JSON)
         ).andExpectAll(
                 status().isOk()

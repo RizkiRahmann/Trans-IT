@@ -8,5 +8,5 @@ public class ApiUrlConstant {
     public static final String HOTEL = "hotel";
     public static final String PURCHASE = "purchase";
     public static final String LOG = "log";
-    public static final String TOKEN = "eyJhbGciOiJIUzUxMiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJ0cmFucy1pdCIsInN1YiI6ImZlNmJhZWU5LTNjM2EtNDg2Ny04NThmLWQ3MGM0NmRmOGQxZCIsImV4cCI6MTcwOTUzODk2MSwicm9sZXMiOlsiUk9MRV9DVVNUT01FUiJdfQ.rc2Wbrmcvt92wuKjiwRULJSr3BgWH_j2KRoZmUcUuiBJGN9x6xNzsj8G_cDwK7pYe2WoNIs46M3af-MYDL1wpQ";
+    public static final String TOKEN = "eyJhbGciOiJIUzUxMiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJ0cmFucy1pdCIsInN1YiI6IjQwMGY3MDA0LTZiYzctNDgxYi1iYTAyLTAxNmM0NThjMWNjZCIsImV4cCI6MTcwOTYxMDI5MSwicm9sZXMiOlsiUk9MRV9TVVBFUl9BRE1JTiIsIlJPTEVfQURNSU4iLCJST0xFX0NVU1RPTUVSIl19.YkWDkLm0VKgqkrYCc0jfGC43oDsYxqxZsQ8Kkbd27YdJYJyv8wGLZv6vhWeND1lHbFx_A7BjqNzaqb_qzwzYjQ";
 }

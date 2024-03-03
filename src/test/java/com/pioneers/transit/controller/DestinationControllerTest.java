@@ -22,11 +22,6 @@ class DestinationControllerTest {
     private MockMvc mockMvc;
 
     private String destinationId = "4b601ce1-919b-4e85-aed3-5609c3dd1886";
-    private String token = "eyJhbGciOiJIUzUxMiIsInR5cCI6IkpXVCJ9." +
-            "eyJpc3MiOiJ0cmFucy1pdCIsInN1YiI6ImZlNmJhZWU5LTNjM2E" +
-            "tNDg2Ny04NThmLWQ3MGM0NmRmOGQxZCIsImV4cCI6MTcwOTUzODk2" +
-            "MSwicm9sZXMiOlsiUk9MRV9DVVNUT01FUiJdfQ.rc2Wbrmcvt92w" +
-            "uKjiwRULJSr3BgWH_j2KRoZmUcUuiBJGN9x6xNzsj8G_cDwK7pYe2WoNIs46M3af-MYDL1wpQ";
     @Test
     void createDestination() throws Exception {
         String json = """
@@ -41,7 +36,7 @@ class DestinationControllerTest {
 
         mockMvc.perform(
                 post("/destination")
-                        .header(HttpHeaders.AUTHORIZATION,"Bearer " + token)
+                        .header(HttpHeaders.AUTHORIZATION,"Bearer " + ApiUrlConstant.TOKEN)
                         .accept(MediaType.APPLICATION_JSON)
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(json)
@@ -54,7 +49,7 @@ class DestinationControllerTest {
     void getAll() throws Exception {
         mockMvc.perform(
                 get("/destination")
-                        .header(HttpHeaders.AUTHORIZATION,"Bearer " + token)
+                        .header(HttpHeaders.AUTHORIZATION,"Bearer " + ApiUrlConstant.TOKEN)
                         .contentType(MediaType.APPLICATION_JSON)
         ).andExpectAll(
                 status().isOk()
@@ -65,7 +60,7 @@ class DestinationControllerTest {
     void getById() throws Exception {
         mockMvc.perform(
                 get("/destination/"+ destinationId)
-                        .header(HttpHeaders.AUTHORIZATION,"Bearer " + token)
+                        .header(HttpHeaders.AUTHORIZATION,"Bearer " + ApiUrlConstant.TOKEN)
                         .contentType(MediaType.APPLICATION_JSON)
         ).andExpectAll(
                 status().isOk()
@@ -87,7 +82,7 @@ class DestinationControllerTest {
 
         mockMvc.perform(
                 put("/destination")
-                        .header(HttpHeaders.AUTHORIZATION,"Bearer " + token)
+                        .header(HttpHeaders.AUTHORIZATION,"Bearer " + ApiUrlConstant.TOKEN)
                         .accept(MediaType.APPLICATION_JSON)
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(json)
@@ -100,7 +95,7 @@ class DestinationControllerTest {
     void deleteById() throws Exception {
         mockMvc.perform(
                 delete("/destination/"+ destinationId)
-                        .header(HttpHeaders.AUTHORIZATION,"Bearer " + token)
+                        .header(HttpHeaders.AUTHORIZATION,"Bearer " + ApiUrlConstant.TOKEN)
                         .contentType(MediaType.APPLICATION_JSON)
         ).andExpectAll(
                 status().isOk()

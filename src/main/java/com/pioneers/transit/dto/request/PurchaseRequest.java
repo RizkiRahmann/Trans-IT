@@ -28,4 +28,9 @@ public class PurchaseRequest {
     private EnumPayment payment;
     private User user;
     private List<Log> logs;
+
+    @JsonFormat(pattern = "yyyy-MM-dd")
+    private Date chkIn;
+    @JsonFormat(pattern = "yyyy-MM-dd")
+    private Date chkOut;
 }

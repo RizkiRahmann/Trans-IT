@@ -30,7 +30,7 @@ class AuthControllerTest {
     @Test
     void register() throws Exception {
         AuthRequest request = new AuthRequest();
-        request.setEmail("user1@gmail.com");
+        request.setEmail("user3@gmail.com");
         request.setPassword("12345");
 
         mockMvc.perform(
@@ -44,7 +44,7 @@ class AuthControllerTest {
     @Test
     void registerAdmin() throws Exception {
         AuthRequest request = new AuthRequest();
-        request.setEmail("admin2@gmail.com");
+        request.setEmail("admin4@gmail.com");
         request.setPassword("12345");
 
         mockMvc.perform(

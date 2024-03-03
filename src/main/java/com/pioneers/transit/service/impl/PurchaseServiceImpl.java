@@ -3,6 +3,7 @@ package com.pioneers.transit.service.impl;
 import com.pioneers.transit.dto.request.LogRequest;
 import com.pioneers.transit.dto.request.PurchaseRequest;
 import com.pioneers.transit.dto.response.BusResponse;
+import com.pioneers.transit.dto.response.HotelResponseClient;
 import com.pioneers.transit.dto.response.PageResponseWrapper;
 import com.pioneers.transit.dto.response.PurchaseResponse;
 import com.pioneers.transit.entity.*;
@@ -29,6 +30,7 @@ public class PurchaseServiceImpl implements PurchaseService {
     private final UserRepository userRepository;
     private final ValidationService validationService;
     private final PaymentService paymentService;
+    private final HotelServiceClient hotelServiceClient;
 
     @Override
     @Transactional
@@ -39,6 +41,8 @@ public class PurchaseServiceImpl implements PurchaseService {
                 .orElseThrow(()->new ResponseStatusException(HttpStatus.NOT_FOUND,"ID User Not Found"));
         Purchase purchase = Purchase.builder()
                 .purchaseDate(request.getPurchaseDate())
+                .checkIn(request.getChkIn())
+                .checkOut(request.getChkOut())
                 .payment(payment)
                 .user(user)
                 .logs(request.getLogs())
@@ -101,6 +105,8 @@ public class PurchaseServiceImpl implements PurchaseService {
         return PurchaseResponse.builder()
                 .id(purchase.getId())
                 .purchaseDate(purchase.getPurchaseDate())
+                .checkIn(purchase.getCheckIn())
+                .checkOut(purchase.getCheckOut())
                 .payment(purchase.getPayment())
                 .user(purchase.getUser())
                 .logs(purchase.getLogs())

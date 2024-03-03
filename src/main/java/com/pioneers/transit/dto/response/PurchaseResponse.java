@@ -20,6 +20,8 @@ public class PurchaseResponse {
     private String id;
     @JsonFormat(pattern = "yyyy-MM-dd")
     private Date purchaseDate;
+    private Date checkIn;
+    private Date checkOut;
     private Payment payment;
     private User user;
     private List<Log> logs;

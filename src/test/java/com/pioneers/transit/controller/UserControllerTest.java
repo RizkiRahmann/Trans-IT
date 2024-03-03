@@ -7,6 +7,7 @@ import com.pioneers.transit.repository.LogRepository;
 import com.pioneers.transit.repository.PurchaseRepository;
 import com.pioneers.transit.repository.UserCredentialRepository;
 import com.pioneers.transit.repository.UserRepository;
+import com.pioneers.transit.utils.constant.ApiUrlConstant;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -39,13 +40,8 @@ class UserControllerTest {
     private PurchaseRepository purchaseRepository;
     @Autowired
     private ObjectMapper objectMapper;
-    private String userId = "9fed65fd-89ff-4efd-af9a-9aac78360a58";
-    private String userCredentialId = "756cffb2-cfe4-41a8-81ed-b68124e7c280";
-    private String token = "eyJhbGciOiJIUzUxMiIsInR5cCI6IkpXVCJ9." +
-            "eyJpc3MiOiJ0cmFucy1pdCIsInN1YiI6ImZlNmJhZWU5LTNjM2E" +
-            "tNDg2Ny04NThmLWQ3MGM0NmRmOGQxZCIsImV4cCI6MTcwOTUzODk2" +
-            "MSwicm9sZXMiOlsiUk9MRV9DVVNUT01FUiJdfQ.rc2Wbrmcvt92w" +
-            "uKjiwRULJSr3BgWH_j2KRoZmUcUuiBJGN9x6xNzsj8G_cDwK7pYe2WoNIs46M3af-MYDL1wpQ";
+    private String userId = "032bea02-8214-4880-aec7-d6cddbee9626";
+    private String userCredentialId = "bc8d1c79-54e6-4201-b219-09cf4a040622";
 
 //    @BeforeEach
 //    void setUp() throws Exception {
@@ -83,7 +79,7 @@ class UserControllerTest {
 
         mockMvc.perform(
                 post("/user")
-                        .header(HttpHeaders.AUTHORIZATION,"Bearer " + token)
+                        .header(HttpHeaders.AUTHORIZATION,"Bearer " + ApiUrlConstant.TOKEN)
                         .accept(MediaType.APPLICATION_JSON)
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(json)
@@ -96,7 +92,7 @@ class UserControllerTest {
     void getAll() throws Exception {
         mockMvc.perform(
                 get("/user")
-                        .header(HttpHeaders.AUTHORIZATION,"Bearer " + token)
+                        .header(HttpHeaders.AUTHORIZATION,"Bearer " + ApiUrlConstant.TOKEN)
                         .contentType(MediaType.APPLICATION_JSON)
         ).andExpectAll(
                 status().isOk()
@@ -108,7 +104,7 @@ class UserControllerTest {
 
         mockMvc.perform(
                 get("/user/"+ userId)
-                        .header(HttpHeaders.AUTHORIZATION,"Bearer " + token)
+                        .header(HttpHeaders.AUTHORIZATION,"Bearer " + ApiUrlConstant.TOKEN)
                         .contentType(MediaType.APPLICATION_JSON)
         ).andExpectAll(
                 status().isOk()
@@ -130,7 +126,7 @@ class UserControllerTest {
 
         mockMvc.perform(
                 put("/user")
-                        .header(HttpHeaders.AUTHORIZATION,"Bearer " + token)
+                        .header(HttpHeaders.AUTHORIZATION,"Bearer " + ApiUrlConstant.TOKEN)
                         .accept(MediaType.APPLICATION_JSON)
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(json)
@@ -143,7 +139,7 @@ class UserControllerTest {
     void deleteById() throws Exception {
         mockMvc.perform(
                 delete("/user/"+ userId)
-                        .header(HttpHeaders.AUTHORIZATION,"Bearer " + token)
+                        .header(HttpHeaders.AUTHORIZATION,"Bearer " + ApiUrlConstant.TOKEN)
                         .contentType(MediaType.APPLICATION_JSON)
         ).andExpectAll(
                 status().isOk()

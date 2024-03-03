@@ -25,12 +25,6 @@ import io.swagger.v3.oas.annotations.servers.Server;
                 ),
                 termsOfService = "Term of service"
         ),
-        servers = {
-                @Server(
-                        description = "Trans-IT",
-                        url = "Local"
-                )
-        },
         security = {
                 @SecurityRequirement(
                         name = "bearerAuth"

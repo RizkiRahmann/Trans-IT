@@ -8,12 +8,12 @@ import com.pioneers.transit.repository.LogRepository;
 import com.pioneers.transit.repository.PurchaseRepository;
 import com.pioneers.transit.repository.UserCredentialRepository;
 import com.pioneers.transit.repository.UserRepository;
-<<<<<<< HEAD
+
 import lombok.RequiredArgsConstructor;
-=======
+
 import com.pioneers.transit.utils.constant.ApiUrlConstant;
 import lombok.extern.slf4j.Slf4j;
->>>>>>> c698260c169fab1f8baa68244f8a07c3d76daa51
+
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -62,7 +62,7 @@ class UserControllerTest {
 
     @Test
     void createUserSuccess() throws Exception {
-<<<<<<< HEAD
+
         UserCredential userCredential = userCredentialRepository.findById("fe6baee9-3c3a-4867-858f-d70c46df8d1d")
                 .orElseThrow(null);
         UserRequest request = new UserRequest();
@@ -75,7 +75,7 @@ class UserControllerTest {
 
         mockMvc.perform(
                 post("/user")
-=======
+
 //        UserCredential userCredential = userCredentialRepository.findById("23cc327b-ddc6-4b31-9394-24a1e7872938")
 //                .orElseThrow(null);
 //        UserRequest request = new UserRequest();

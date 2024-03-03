@@ -2,6 +2,7 @@ package com.pioneers.transit.dto.response;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.pioneers.transit.entity.Log;
+import com.pioneers.transit.entity.Payment;
 import com.pioneers.transit.entity.User;
 import lombok.*;
 import org.springframework.data.annotation.CreatedDate;
@@ -19,6 +20,9 @@ public class PurchaseResponse {
     private String id;
     @JsonFormat(pattern = "yyyy-MM-dd")
     private Date purchaseDate;
+    private Date checkIn;
+    private Date checkOut;
+    private Payment payment;
     private User user;
     private List<Log> logs;
 }

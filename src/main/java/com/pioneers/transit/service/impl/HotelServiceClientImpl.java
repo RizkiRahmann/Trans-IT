@@ -1,6 +1,5 @@
 package com.pioneers.transit.service.impl;
 
-import com.pioneers.transit.dto.request.HotelRequestClient;
 import com.pioneers.transit.dto.response.HotelResponseClient;
 import com.pioneers.transit.service.HotelServiceClient;
 import lombok.RequiredArgsConstructor;
@@ -24,11 +23,5 @@ public class HotelServiceClientImpl implements HotelServiceClient {
         );
         response.getBody().setId(UUID.randomUUID().toString());
         return response.getBody();
-    }
-
-    private static HotelResponseClient toHotelClientResponse(HotelRequestClient requestClient){
-        return HotelResponseClient.builder()
-                .result(requestClient.getResult())
-                .build();
     }
 }

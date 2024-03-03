@@ -1,0 +1,229 @@
+
+
+
+<!DOCTYPE html>
+<html id="htmlId">
+<head>
+  <meta http-equiv="Content-Type" content="text/html;charset=windows-1252"> 
+  <title>Coverage Report > PurchaseServiceImpl</title>
+  <style type="text/css">
+    @import "../../css/coverage.css";
+    @import "../../css/idea.min.css";
+  </style>
+  <script type="text/javascript" src="../../js/highlight.min.js"></script>
+  <script type="text/javascript" src="../../js/highlightjs-line-numbers.min.js"></script>
+</head>
+
+<body>
+<div class="content">
+<div class="breadCrumbs">
+Current scope:     <a href="../../index.html">all classes</a>
+    <span class="separator">|</span>
+    <a href="../index.html">com.pioneers.transit.service.impl</a>
+</div>
+
+<h1>Coverage Summary for Class: PurchaseServiceImpl (com.pioneers.transit.service.impl)</h1>
+
+<table class="coverageStats">
+
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">PurchaseServiceImpl</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (7/7)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    91.1%
+  </span>
+  <span class="absValue">
+    (51/56)
+  </span>
+</td>
+</tr>
+  <tr>
+    <td class="name">PurchaseServiceImpl$$SpringCGLIB$$0</td>
+  </tr>
+<tr>
+  <td class="name"><strong>Total</strong></td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (7/7)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    91.1%
+  </span>
+  <span class="absValue">
+    (51/56)
+  </span>
+</td>
+</tr>
+</table>
+
+<br/>
+<br/>
+
+
+<pre>
+<code class="sourceCode" id="sourceCode">&nbsp;package com.pioneers.transit.service.impl;
+&nbsp;
+&nbsp;import com.pioneers.transit.dto.request.LogRequest;
+&nbsp;import com.pioneers.transit.dto.request.PurchaseRequest;
+&nbsp;import com.pioneers.transit.dto.response.BusResponse;
+&nbsp;import com.pioneers.transit.dto.response.HotelResponseClient;
+&nbsp;import com.pioneers.transit.dto.response.PageResponseWrapper;
+&nbsp;import com.pioneers.transit.dto.response.PurchaseResponse;
+&nbsp;import com.pioneers.transit.entity.*;
+&nbsp;import com.pioneers.transit.repository.BusRepository;
+&nbsp;import com.pioneers.transit.repository.PurchaseRepository;
+&nbsp;import com.pioneers.transit.repository.UserRepository;
+&nbsp;import com.pioneers.transit.service.*;
+&nbsp;import lombok.RequiredArgsConstructor;
+&nbsp;import org.springframework.data.domain.PageImpl;
+&nbsp;import org.springframework.data.domain.Pageable;
+&nbsp;import org.springframework.http.HttpStatus;
+&nbsp;import org.springframework.stereotype.Service;
+&nbsp;import org.springframework.transaction.annotation.Transactional;
+&nbsp;import org.springframework.web.server.ResponseStatusException;
+&nbsp;
+&nbsp;import java.util.List;
+&nbsp;
+&nbsp;@Service
+<b class="fc">&nbsp;@RequiredArgsConstructor</b>
+&nbsp;public class PurchaseServiceImpl implements PurchaseService {
+&nbsp;    private final PurchaseRepository purchaseRepository;
+&nbsp;    private final LogService logService;
+&nbsp;    private final BusRepository busRepository;
+&nbsp;    private final UserRepository userRepository;
+&nbsp;    private final ValidationService validationService;
+&nbsp;    private final PaymentService paymentService;
+&nbsp;    private final HotelServiceClient hotelServiceClient;
+&nbsp;
+&nbsp;    @Override
+&nbsp;    @Transactional
+&nbsp;    public PurchaseResponse create(PurchaseRequest request) {
+<b class="fc">&nbsp;        validationService.validate(request);</b>
+<b class="fc">&nbsp;        Payment payment = paymentService.getOrSave(request.getPayment());</b>
+<b class="fc">&nbsp;        User user = userRepository.findById(request.getUser().getId())</b>
+<b class="fc">&nbsp;                .orElseThrow(()-&gt;new ResponseStatusException(HttpStatus.NOT_FOUND,&quot;ID User Not Found&quot;));</b>
+<b class="fc">&nbsp;        Purchase purchase = Purchase.builder()</b>
+<b class="fc">&nbsp;                .purchaseDate(request.getPurchaseDate())</b>
+<b class="fc">&nbsp;                .checkIn(request.getChkIn())</b>
+<b class="fc">&nbsp;                .checkOut(request.getChkOut())</b>
+<b class="fc">&nbsp;                .payment(payment)</b>
+<b class="fc">&nbsp;                .user(user)</b>
+<b class="fc">&nbsp;                .logs(request.getLogs())</b>
+<b class="fc">&nbsp;                .build();</b>
+<b class="fc">&nbsp;        Purchase purchaseSave = purchaseRepository.save(purchase);</b>
+<b class="fc">&nbsp;        for (Log log : purchase.getLogs()){</b>
+<b class="fc">&nbsp;            log.setPurchase(purchaseSave);</b>
+<b class="fc">&nbsp;            Bus bus = busRepository.findById(log.getBus().getId())</b>
+<b class="fc">&nbsp;                    .orElseThrow(()-&gt;new ResponseStatusException(HttpStatus.NOT_FOUND,&quot;ID Bus Not Found&quot;));</b>
+<b class="fc">&nbsp;            if (bus.getChair() &lt; 1 || bus.getChair()-log.getTicketQuantity()&lt;0) throw new ResponseStatusException(HttpStatus.FORBIDDEN,&quot;Full...&quot;);</b>
+<b class="fc">&nbsp;            bus.setChair(bus.getChair()-log.getTicketQuantity());</b>
+<b class="fc">&nbsp;            LogRequest logRequest = LogRequest.builder()</b>
+<b class="fc">&nbsp;                    .ticketQuantity(log.getTicketQuantity())</b>
+<b class="fc">&nbsp;                    .price(log.getPrice())</b>
+<b class="fc">&nbsp;                    .hotelKey(log.getHotelKey())</b>
+<b class="fc">&nbsp;                    .hotelUrl(log.getHotelUrl())</b>
+<b class="fc">&nbsp;                    .purchase(log.getPurchase())</b>
+<b class="fc">&nbsp;                    .destination(log.getDestination())</b>
+<b class="fc">&nbsp;                    .bus(log.getBus())</b>
+<b class="fc">&nbsp;                    .build();</b>
+<b class="fc">&nbsp;            logService.saveLog(logRequest);</b>
+<b class="fc">&nbsp;        }</b>
+<b class="fc">&nbsp;        return toResponse(purchaseSave);</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    @Override
+&nbsp;    public PageResponseWrapper&lt;PurchaseResponse&gt; getAll(Pageable pageable) {
+<b class="fc">&nbsp;        PageResponseWrapper&lt;Purchase&gt; purchasePage = new PageResponseWrapper&lt;&gt;(purchaseRepository.findAll(pageable));</b>
+<b class="fc">&nbsp;        List&lt;PurchaseResponse&gt; responseList = purchasePage.getData().stream()</b>
+<b class="fc">&nbsp;                .map(PurchaseServiceImpl::toResponse).toList();</b>
+<b class="fc">&nbsp;        PageImpl&lt;PurchaseResponse&gt; responses = new PageImpl&lt;&gt;(responseList,pageable,purchasePage.getTotalElements());</b>
+<b class="fc">&nbsp;        return new PageResponseWrapper&lt;&gt;(responses);</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    @Override
+&nbsp;    public PurchaseResponse getById(String id) {
+<b class="fc">&nbsp;        Purchase purchase = purchaseRepository.findById(id).orElseThrow(null);</b>
+<b class="nc">&nbsp;        return toResponse(purchase);</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    @Override
+&nbsp;    @Transactional
+&nbsp;    public PurchaseResponse update(PurchaseRequest request) {
+<b class="fc">&nbsp;        validationService.validate(request);</b>
+<b class="fc">&nbsp;        Purchase purchase = purchaseRepository.findById(request.getId())</b>
+<b class="fc">&nbsp;                .orElseThrow(()-&gt;new ResponseStatusException(HttpStatus.NOT_FOUND, &quot;Id purchase NOT FOUND&quot;));</b>
+<b class="nc">&nbsp;        purchase.setPurchaseDate(request.getPurchaseDate());</b>
+<b class="nc">&nbsp;        purchase.setPayment(paymentService.getOrSave(request.getPayment()));</b>
+<b class="nc">&nbsp;        purchaseRepository.save(purchase);</b>
+<b class="nc">&nbsp;        return toResponse(purchase);</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    @Override
+&nbsp;    public void delete(String id) {
+<b class="fc">&nbsp;        purchaseRepository.deleteById(id);</b>
+&nbsp;    }
+&nbsp;
+&nbsp;
+&nbsp;    private static PurchaseResponse toResponse(Purchase purchase){
+<b class="fc">&nbsp;        return PurchaseResponse.builder()</b>
+<b class="fc">&nbsp;                .id(purchase.getId())</b>
+<b class="fc">&nbsp;                .purchaseDate(purchase.getPurchaseDate())</b>
+<b class="fc">&nbsp;                .checkIn(purchase.getCheckIn())</b>
+<b class="fc">&nbsp;                .checkOut(purchase.getCheckOut())</b>
+<b class="fc">&nbsp;                .payment(purchase.getPayment())</b>
+<b class="fc">&nbsp;                .user(purchase.getUser())</b>
+<b class="fc">&nbsp;                .logs(purchase.getLogs())</b>
+<b class="fc">&nbsp;                .build();</b>
+&nbsp;    }
+&nbsp;}
+</code>
+</pre>
+</div>
+
+<script type="text/javascript">
+(function() {
+    var msie = false, msie9 = false;
+    /*@cc_on
+      msie = true;
+      @if (@_jscript_version >= 9)
+        msie9 = true;
+      @end
+    @*/
+
+    if (!msie || msie && msie9) {
+      hljs.highlightAll()
+      hljs.initLineNumbersOnLoad();
+    }
+})();
+</script>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2024-03-03 11:57</div>
+</div>
+</body>
+</html>

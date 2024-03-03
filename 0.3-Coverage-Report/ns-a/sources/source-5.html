@@ -1,0 +1,189 @@
+
+
+
+<!DOCTYPE html>
+<html id="htmlId">
+<head>
+  <meta http-equiv="Content-Type" content="text/html;charset=windows-1252"> 
+  <title>Coverage Report > LogServiceImpl</title>
+  <style type="text/css">
+    @import "../../css/coverage.css";
+    @import "../../css/idea.min.css";
+  </style>
+  <script type="text/javascript" src="../../js/highlight.min.js"></script>
+  <script type="text/javascript" src="../../js/highlightjs-line-numbers.min.js"></script>
+</head>
+
+<body>
+<div class="content">
+<div class="breadCrumbs">
+Current scope:     <a href="../../index.html">all classes</a>
+    <span class="separator">|</span>
+    <a href="../index.html">com.pioneers.transit.service.impl</a>
+</div>
+
+<h1>Coverage Summary for Class: LogServiceImpl (com.pioneers.transit.service.impl)</h1>
+
+<table class="coverageStats">
+
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">LogServiceImpl</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (4/4)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (32/32)
+  </span>
+</td>
+</tr>
+  <tr>
+    <td class="name">LogServiceImpl$$SpringCGLIB$$0</td>
+  </tr>
+<tr>
+  <td class="name"><strong>Total</strong></td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (4/4)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (32/32)
+  </span>
+</td>
+</tr>
+</table>
+
+<br/>
+<br/>
+
+
+<pre>
+<code class="sourceCode" id="sourceCode">&nbsp;package com.pioneers.transit.service.impl;
+&nbsp;
+&nbsp;import com.pioneers.transit.dto.request.LogRequest;
+&nbsp;import com.pioneers.transit.dto.response.LogResponse;
+&nbsp;import com.pioneers.transit.dto.response.PageResponseWrapper;
+&nbsp;import com.pioneers.transit.entity.Bus;
+&nbsp;import com.pioneers.transit.entity.Destination;
+&nbsp;import com.pioneers.transit.entity.Log;
+&nbsp;import com.pioneers.transit.repository.BusRepository;
+&nbsp;import com.pioneers.transit.repository.DestinationRepository;
+&nbsp;import com.pioneers.transit.repository.LogRepository;
+&nbsp;import com.pioneers.transit.service.LogService;
+&nbsp;import com.pioneers.transit.service.ValidationService;
+&nbsp;import lombok.RequiredArgsConstructor;
+&nbsp;import lombok.extern.slf4j.Slf4j;
+&nbsp;import org.springframework.data.domain.PageImpl;
+&nbsp;import org.springframework.data.domain.Pageable;
+&nbsp;import org.springframework.http.HttpStatus;
+&nbsp;import org.springframework.stereotype.Service;
+&nbsp;import org.springframework.transaction.annotation.Transactional;
+&nbsp;import org.springframework.web.server.ResponseStatusException;
+&nbsp;
+&nbsp;import java.util.List;
+&nbsp;
+&nbsp;@Service
+<b class="fc">&nbsp;@RequiredArgsConstructor</b>
+&nbsp;public class LogServiceImpl implements LogService {
+&nbsp;    private final LogRepository logRepository;
+&nbsp;    private final DestinationRepository destinationRepository;
+&nbsp;    private final BusRepository busRepository;
+&nbsp;    private final ValidationService validationService;
+&nbsp;
+&nbsp;    @Override
+&nbsp;    @Transactional
+&nbsp;    public LogResponse saveLog(LogRequest request) {
+<b class="fc">&nbsp;        validationService.validate(request);</b>
+<b class="fc">&nbsp;        Destination destination = destinationRepository.findById(request.getDestination().getId())</b>
+<b class="fc">&nbsp;                .orElseThrow(()-&gt;new ResponseStatusException(HttpStatus.NOT_FOUND,&quot;ID Destination Not Found&quot;));</b>
+<b class="fc">&nbsp;        Bus bus = busRepository.findById(request.getBus().getId())</b>
+<b class="fc">&nbsp;                .orElseThrow(()-&gt;new ResponseStatusException(HttpStatus.NOT_FOUND,&quot;ID Bus Not Found&quot;));</b>
+<b class="fc">&nbsp;        Log log = Log.builder()</b>
+<b class="fc">&nbsp;                .ticketQuantity(request.getTicketQuantity())</b>
+<b class="fc">&nbsp;                .price(destination.getPrice()+bus.getPrice())</b>
+<b class="fc">&nbsp;                .hotelKey(request.getHotelKey())</b>
+<b class="fc">&nbsp;                .hotelUrl(request.getHotelUrl())</b>
+<b class="fc">&nbsp;                .purchase(request.getPurchase())</b>
+<b class="fc">&nbsp;                .destination(destination)</b>
+<b class="fc">&nbsp;                .bus(bus)</b>
+<b class="fc">&nbsp;                .build();</b>
+<b class="fc">&nbsp;        logRepository.save(log);</b>
+<b class="fc">&nbsp;        return toResponse(log);</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    @Override
+&nbsp;    public PageResponseWrapper&lt;LogResponse&gt; getLog(Pageable pageable) {
+<b class="fc">&nbsp;        PageResponseWrapper&lt;Log&gt; logPage = new PageResponseWrapper&lt;&gt;(logRepository.findAll(pageable));</b>
+<b class="fc">&nbsp;        List&lt;LogResponse&gt; responseList = logPage.getData().stream()</b>
+<b class="fc">&nbsp;                .map(LogServiceImpl::toResponse).toList();</b>
+<b class="fc">&nbsp;        PageImpl&lt;LogResponse&gt; responses = new PageImpl&lt;&gt;(responseList,pageable, logPage.getTotalElements());</b>
+<b class="fc">&nbsp;        return new PageResponseWrapper&lt;&gt;(responses);</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    private static LogResponse toResponse(Log log){
+<b class="fc">&nbsp;        return LogResponse.builder()</b>
+<b class="fc">&nbsp;                .id(log.getId())</b>
+<b class="fc">&nbsp;                .ticketQuantity(log.getTicketQuantity())</b>
+<b class="fc">&nbsp;                .price(log.getPrice())</b>
+<b class="fc">&nbsp;                .purchase(log.getPurchase())</b>
+<b class="fc">&nbsp;                .destination(log.getDestination())</b>
+<b class="fc">&nbsp;                .bus(log.getBus())</b>
+<b class="fc">&nbsp;                .hotelKey(log.getHotelKey())</b>
+<b class="fc">&nbsp;                .hotelUrl(log.getHotelUrl())</b>
+<b class="fc">&nbsp;                .build();</b>
+&nbsp;    }
+&nbsp;}
+</code>
+</pre>
+</div>
+
+<script type="text/javascript">
+(function() {
+    var msie = false, msie9 = false;
+    /*@cc_on
+      msie = true;
+      @if (@_jscript_version >= 9)
+        msie9 = true;
+      @end
+    @*/
+
+    if (!msie || msie && msie9) {
+      hljs.highlightAll()
+      hljs.initLineNumbersOnLoad();
+    }
+})();
+</script>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2024-03-03 14:31</div>
+</div>
+</body>
+</html>

@@ -3,12 +3,10 @@ package com.pioneers.transit.service.impl;
 import com.pioneers.transit.dto.request.LogRequest;
 import com.pioneers.transit.dto.request.PurchaseRequest;
 import com.pioneers.transit.dto.response.BusResponse;
+import com.pioneers.transit.dto.response.HotelResponseClient;
 import com.pioneers.transit.dto.response.PageResponseWrapper;
 import com.pioneers.transit.dto.response.PurchaseResponse;
-import com.pioneers.transit.entity.Bus;
-import com.pioneers.transit.entity.Log;
-import com.pioneers.transit.entity.Purchase;
-import com.pioneers.transit.entity.User;
+import com.pioneers.transit.entity.*;
 import com.pioneers.transit.repository.BusRepository;
 import com.pioneers.transit.repository.PurchaseRepository;
 import com.pioneers.transit.repository.UserRepository;
@@ -31,15 +29,21 @@ public class PurchaseServiceImpl implements PurchaseService {
     private final BusRepository busRepository;
     private final UserRepository userRepository;
     private final ValidationService validationService;
+    private final PaymentService paymentService;
+    private final HotelServiceClient hotelServiceClient;
 
     @Override
     @Transactional
     public PurchaseResponse create(PurchaseRequest request) {
         validationService.validate(request);
+        Payment payment = paymentService.getOrSave(request.getPayment());
         User user = userRepository.findById(request.getUser().getId())
                 .orElseThrow(()->new ResponseStatusException(HttpStatus.NOT_FOUND,"ID User Not Found"));
         Purchase purchase = Purchase.builder()
                 .purchaseDate(request.getPurchaseDate())
+                .checkIn(request.getChkIn())
+                .checkOut(request.getChkOut())
+                .payment(payment)
                 .user(user)
                 .logs(request.getLogs())
                 .build();
@@ -83,8 +87,12 @@ public class PurchaseServiceImpl implements PurchaseService {
     @Transactional
     public PurchaseResponse update(PurchaseRequest request) {
         validationService.validate(request);
-        Purchase purchase = purchaseRepository.findById(request.getId()).orElseThrow(null);
-        return create(request);
+        Purchase purchase = purchaseRepository.findById(request.getId())
+                .orElseThrow(()->new ResponseStatusException(HttpStatus.NOT_FOUND, "Id purchase NOT FOUND"));
+        purchase.setPurchaseDate(request.getPurchaseDate());
+        purchase.setPayment(paymentService.getOrSave(request.getPayment()));
+        purchaseRepository.save(purchase);
+        return toResponse(purchase);
     }
 
     @Override
@@ -97,6 +105,9 @@ public class PurchaseServiceImpl implements PurchaseService {
         return PurchaseResponse.builder()
                 .id(purchase.getId())
                 .purchaseDate(purchase.getPurchaseDate())
+                .checkIn(purchase.getCheckIn())
+                .checkOut(purchase.getCheckOut())
+                .payment(purchase.getPayment())
                 .user(purchase.getUser())
                 .logs(purchase.getLogs())
                 .build();

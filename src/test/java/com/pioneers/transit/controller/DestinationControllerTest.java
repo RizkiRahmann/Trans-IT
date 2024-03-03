@@ -21,7 +21,7 @@ class DestinationControllerTest {
     @Autowired
     private MockMvc mockMvc;
 
-    private String destinationId = "4b601ce1-919b-4e85-aed3-5609c3dd1886";
+    private String destinationId = "991be390-84a0-4f77-8586-157aac2946ab";
     @Test
     void createDestination() throws Exception {
         String json = """
@@ -59,7 +59,7 @@ class DestinationControllerTest {
     @Test
     void getById() throws Exception {
         mockMvc.perform(
-                get("/destination/"+ destinationId)
+                get("/destination/225a31de-d3bd-4c80-957f-5f743ba281ca")
                         .header(HttpHeaders.AUTHORIZATION,"Bearer " + ApiUrlConstant.TOKEN)
                         .contentType(MediaType.APPLICATION_JSON)
         ).andExpectAll(

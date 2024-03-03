@@ -1,5 +1,6 @@
 package com.pioneers.transit.controller;
 
+import com.pioneers.transit.repository.LogRepository;
 import com.pioneers.transit.utils.constant.ApiUrlConstant;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,10 +21,13 @@ import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.
 class PurchaseControllerTest {
     @Autowired
     private MockMvc mockMvc;
-    private String purchaseId = "75c6df8d-594b-44e8-820e-6f8185c0404f";
-    private String userId = "9fed65fd-89ff-4efd-af9a-9aac78360a58";
+    private String purchaseId = "c4e42287-6199-4f3d-a3d5-5b532494781d";
+    private String userId = "b501eac9-8575-4970-a9d0-33c5d702efae";
     private String destinationId = "f95e35ee-e22d-4089-b436-8444bf61d7dc";
     private String busId = "0c66bb8b-edad-48ca-b914-4e54aaae0786";
+    @Autowired
+    private LogRepository logRepository;
+    private String logId = "9ddaa07d-a4a7-4298-892e-b30e069d9c49";
 
     @Test
     void createPurchase() throws Exception {
@@ -78,7 +82,7 @@ class PurchaseControllerTest {
     @Test
     void getPurchaseById() throws Exception {
         mockMvc.perform(
-                get("/purchase/"+ purchaseId)
+                get("/purchase/c4e42287-6199-4f3d-a3d5-5b532494781d")
                         .header(HttpHeaders.AUTHORIZATION,"Bearer " + ApiUrlConstant.TOKEN)
                         .contentType(MediaType.APPLICATION_JSON)
         ).andExpectAll(
@@ -108,6 +112,7 @@ class PurchaseControllerTest {
 
     @Test
     void deletePurchase() throws Exception {
+        logRepository.deleteById(logId);
         mockMvc.perform(
                 delete("/purchase/"+ purchaseId)
                         .header(HttpHeaders.AUTHORIZATION,"Bearer " + ApiUrlConstant.TOKEN)

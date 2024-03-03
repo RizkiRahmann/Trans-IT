@@ -20,10 +20,8 @@ import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.
 class LogControllerTest {
     @Autowired
     private MockMvc mockMvc;
-    private String logId = "9fed65fd-89ff-4efd-af9a-9aac78360a58";
-    private String purchaseId = "756cffb2-cfe4-41a8-81ed-b68124e7c280";
     private String destinationId = "f95e35ee-e22d-4089-b436-8444bf61d7dc";
-    private String busId= "65cad4da-9671-478c-bdae-840757e84960";
+    private String busId= "0c66bb8b-edad-48ca-b914-4e54aaae0786";
 
     @Test
     void saveLog() throws Exception {

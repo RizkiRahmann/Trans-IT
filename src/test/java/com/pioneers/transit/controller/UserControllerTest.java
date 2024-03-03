@@ -40,8 +40,8 @@ class UserControllerTest {
     private PurchaseRepository purchaseRepository;
     @Autowired
     private ObjectMapper objectMapper;
-    private String userId = "032bea02-8214-4880-aec7-d6cddbee9626";
-    private String userCredentialId = "bc8d1c79-54e6-4201-b219-09cf4a040622";
+    private String userId = "9fed65fd-89ff-4efd-af9a-9aac78360a58";
+    private String userCredentialId = "ef04a6bc-0a0d-49b6-af1c-a4010c25b123";
 
 //    @BeforeEach
 //    void setUp() throws Exception {

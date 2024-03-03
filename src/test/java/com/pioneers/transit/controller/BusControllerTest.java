@@ -27,7 +27,7 @@ class BusControllerTest {
     @Autowired
     private MockMvc mockMvc;
 
-    private String busId = "e75d7067-858d-4d1b-8d22-9cb2339c030d";
+    private String busId = "f125290f-3998-409f-994a-8d31fee34d8f";
 
     @Test
     void createBus() throws Exception {
@@ -64,7 +64,7 @@ class BusControllerTest {
     @Test
     void getById() throws Exception {
         mockMvc.perform(
-                get("/user/"+ busId)
+                get("/bus/01dce3f4-a8de-4777-bb1d-21e8903ef300")
                         .header(HttpHeaders.AUTHORIZATION,"Bearer " + ApiUrlConstant.TOKEN)
                         .contentType(MediaType.APPLICATION_JSON)
         ).andExpectAll(

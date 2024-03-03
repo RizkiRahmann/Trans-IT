@@ -1,0 +1,177 @@
+
+
+
+<!DOCTYPE html>
+<html id="htmlId">
+<head>
+  <meta http-equiv="Content-Type" content="text/html;charset=windows-1252"> 
+  <title>Coverage Report > DestinationController</title>
+  <style type="text/css">
+    @import "../../css/coverage.css";
+    @import "../../css/idea.min.css";
+  </style>
+  <script type="text/javascript" src="../../js/highlight.min.js"></script>
+  <script type="text/javascript" src="../../js/highlightjs-line-numbers.min.js"></script>
+</head>
+
+<body>
+<div class="content">
+<div class="breadCrumbs">
+Current scope:     <a href="../../index.html">all classes</a>
+    <span class="separator">|</span>
+    <a href="../index.html">com.pioneers.transit.controller</a>
+</div>
+
+<h1>Coverage Summary for Class: DestinationController (com.pioneers.transit.controller)</h1>
+
+<table class="coverageStats">
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Class, %
+</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">DestinationController</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (1/1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (6/6)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    80%
+  </span>
+  <span class="absValue">
+    (16/20)
+  </span>
+</td>
+</tr>
+
+</table>
+
+<br/>
+<br/>
+
+
+<pre>
+<code class="sourceCode" id="sourceCode">&nbsp;package com.pioneers.transit.controller;
+&nbsp;
+&nbsp;import com.pioneers.transit.dto.request.DestinationRequest;
+&nbsp;import com.pioneers.transit.dto.response.BuildResponse;
+&nbsp;import com.pioneers.transit.dto.response.ControllerResponse;
+&nbsp;import com.pioneers.transit.dto.response.DestinationResponse;
+&nbsp;import com.pioneers.transit.dto.response.PageResponseWrapper;
+&nbsp;import com.pioneers.transit.service.DestinationService;
+&nbsp;import com.pioneers.transit.specification.destination.DestinationSearchDTO;
+&nbsp;import com.pioneers.transit.utils.constant.ApiUrlConstant;
+&nbsp;import com.pioneers.transit.utils.constant.ConstMessage;
+&nbsp;import com.pioneers.transit.utils.constant.ConstStatus;
+&nbsp;import io.swagger.v3.oas.annotations.security.SecurityRequirement;
+&nbsp;import lombok.RequiredArgsConstructor;
+&nbsp;import org.springframework.data.domain.Page;
+&nbsp;import org.springframework.data.domain.PageRequest;
+&nbsp;import org.springframework.data.domain.Pageable;
+&nbsp;import org.springframework.data.domain.Sort;
+&nbsp;import org.springframework.http.HttpStatus;
+&nbsp;import org.springframework.http.ResponseEntity;
+&nbsp;import org.springframework.web.bind.annotation.*;
+&nbsp;
+&nbsp;@RestController
+<b class="fc">&nbsp;@RequiredArgsConstructor</b>
+&nbsp;@RequestMapping(ApiUrlConstant.DESTINATION)
+&nbsp;public class DestinationController {
+&nbsp;    private final DestinationService destinationService;
+&nbsp;    private final BuildResponse buildResponse;
+<b class="fc">&nbsp;    private final String entity=&quot;Destination&quot;;</b>
+&nbsp;
+&nbsp;    @PostMapping
+&nbsp;    public ResponseEntity&lt;?&gt; createDestination(@RequestBody DestinationRequest destinationRequest){
+<b class="fc">&nbsp;        DestinationResponse destinationResponse = destinationService.create(destinationRequest);</b>
+<b class="fc">&nbsp;        ControllerResponse&lt;DestinationResponse&gt; response = buildResponse.response(destinationResponse, ConstStatus.STATUS_CREATE, entity, ConstMessage.M_CREATE);</b>
+<b class="fc">&nbsp;        return ResponseEntity.status(HttpStatus.CREATED).body(response);</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    @GetMapping()
+&nbsp;    public ResponseEntity&lt;?&gt; getAll(@RequestParam(name = &quot;page&quot;, defaultValue = &quot;0&quot;) Integer page,
+&nbsp;                                    @RequestParam(name = &quot;size&quot;, defaultValue = &quot;5&quot;) Integer size,
+&nbsp;                                    @RequestParam(name = &quot;sort-by&quot;, defaultValue = &quot;name&quot;) String sortBy,
+&nbsp;                                    @RequestParam(name = &quot;direction&quot;, defaultValue = &quot;ASC&quot;) String direction,
+&nbsp;                                    @ModelAttribute DestinationSearchDTO destinationSearchDTO){
+<b class="fc">&nbsp;        Sort sort = Sort.by(Sort.Direction.fromString(direction), sortBy);</b>
+<b class="fc">&nbsp;        Pageable pageable = PageRequest.of(page, size, sort);</b>
+<b class="fc">&nbsp;        PageResponseWrapper&lt;DestinationResponse&gt; destinationResponses = destinationService.getAll(pageable,destinationSearchDTO);</b>
+<b class="fc">&nbsp;        ControllerResponse&lt;PageResponseWrapper&lt;DestinationResponse&gt;&gt; response = buildResponse</b>
+<b class="fc">&nbsp;                .response(destinationResponses, ConstStatus.STATUS_OK, entity, ConstMessage.M_GET);</b>
+<b class="fc">&nbsp;        return ResponseEntity.ok(response);</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    @GetMapping(&quot;/{id}&quot;)
+&nbsp;    public ResponseEntity&lt;?&gt; getById(@PathVariable String id){
+<b class="fc">&nbsp;        DestinationResponse destinationResponse = destinationService.getById(id);</b>
+<b class="nc">&nbsp;        ControllerResponse&lt;DestinationResponse&gt; response = buildResponse.response(destinationResponse, ConstStatus.STATUS_OK, entity, ConstMessage.M_GET);</b>
+<b class="nc">&nbsp;        return ResponseEntity.ok(response);</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    @PutMapping
+&nbsp;    public ResponseEntity&lt;?&gt; updateDestination(@RequestBody DestinationRequest destinationRequest){
+<b class="fc">&nbsp;        DestinationResponse destinationResponse = destinationService.update(destinationRequest);</b>
+<b class="nc">&nbsp;        ControllerResponse&lt;DestinationResponse&gt; response = buildResponse.response(destinationResponse, ConstStatus.STATUS_CREATE, entity, ConstMessage.M_UPDATE);</b>
+<b class="nc">&nbsp;        return ResponseEntity.status(HttpStatus.CREATED).body(response);</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    @DeleteMapping(&quot;/{id}&quot;)
+&nbsp;    public ResponseEntity&lt;?&gt; deleteById(@PathVariable String id){
+<b class="fc">&nbsp;        destinationService.delete(id);</b>
+<b class="fc">&nbsp;        ControllerResponse&lt;String&gt; response = buildResponse.response(&quot;Data berhasil dihapus&quot;, ConstStatus.STATUS_OK, entity, ConstMessage.M_DELETE);</b>
+<b class="fc">&nbsp;        return ResponseEntity.ok(response);</b>
+&nbsp;    }
+&nbsp;
+&nbsp;}
+</code>
+</pre>
+</div>
+
+<script type="text/javascript">
+(function() {
+    var msie = false, msie9 = false;
+    /*@cc_on
+      msie = true;
+      @if (@_jscript_version >= 9)
+        msie9 = true;
+      @end
+    @*/
+
+    if (!msie || msie && msie9) {
+      hljs.highlightAll()
+      hljs.initLineNumbersOnLoad();
+    }
+})();
+</script>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2024-03-03 11:57</div>
+</div>
+</body>
+</html>

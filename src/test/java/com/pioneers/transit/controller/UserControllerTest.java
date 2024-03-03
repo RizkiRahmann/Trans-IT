@@ -2,12 +2,10 @@ package com.pioneers.transit.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.pioneers.transit.dto.request.UserRequest;
+import com.pioneers.transit.entity.Image;
 import com.pioneers.transit.entity.User;
 import com.pioneers.transit.entity.UserCredential;
-import com.pioneers.transit.repository.LogRepository;
-import com.pioneers.transit.repository.PurchaseRepository;
-import com.pioneers.transit.repository.UserCredentialRepository;
-import com.pioneers.transit.repository.UserRepository;
+import com.pioneers.transit.repository.*;
 import com.pioneers.transit.utils.constant.ApiUrlConstant;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.BeforeEach;
@@ -16,11 +14,20 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpMethod;
 import org.springframework.http.MediaType;
+import org.springframework.mock.web.MockHttpServletRequest;
+import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.request.MockMultipartHttpServletRequestBuilder;
+import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
+import org.springframework.test.web.servlet.request.RequestPostProcessor;
 
 
+import java.nio.charset.StandardCharsets;
 import java.sql.Date;
+import java.util.Arrays;
+import java.util.Random;
 import java.util.UUID;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
@@ -38,6 +45,8 @@ class UserControllerTest {
     @Autowired
     private UserCredentialRepository userCredentialRepository;
     @Autowired
+    private ImageRepository imageRepository;
+    @Autowired
     private LogRepository logRepository;
     @Autowired
     private PurchaseRepository purchaseRepository;
@@ -50,6 +59,7 @@ class UserControllerTest {
         logRepository.deleteAll();
         purchaseRepository.deleteAll();
         userRepository.deleteAll();
+        imageRepository.deleteAll();
     }
 
     @Test
@@ -81,7 +91,7 @@ class UserControllerTest {
                 """.formatted(userCredentialId);
 
         mockMvc.perform(
-                post("/user")
+                post(ApiUrlConstant.USER)
                         .header(HttpHeaders.AUTHORIZATION,"Bearer " + ApiUrlConstant.TOKEN)
                         .accept(MediaType.APPLICATION_JSON)
                         .contentType(MediaType.APPLICATION_JSON)
@@ -94,7 +104,7 @@ class UserControllerTest {
     @Test
     void getAll() throws Exception {
         mockMvc.perform(
-                get("/user")
+                get(ApiUrlConstant.USER)
                         .header(HttpHeaders.AUTHORIZATION,"Bearer " + ApiUrlConstant.TOKEN)
                         .contentType(MediaType.APPLICATION_JSON)
         ).andExpectAll(
@@ -106,7 +116,7 @@ class UserControllerTest {
     void getById() throws Exception {
         UserCredential uC = new UserCredential();
         uC.setId(UUID.randomUUID().toString());
-        uC.setEmail("rizki5@gmail.com");
+        uC.setEmail("rizki11@gmail.com");
         uC.setPassword("12345");
         UserCredential userCredential = userCredentialRepository.save(uC);
 
@@ -121,7 +131,7 @@ class UserControllerTest {
         userRepository.save(user);
 
         mockMvc.perform(
-                get("/user/"+ user.getId())
+                get(ApiUrlConstant.USER+"/"+ user.getId())
                         .header(HttpHeaders.AUTHORIZATION,"Bearer " + ApiUrlConstant.TOKEN)
                         .contentType(MediaType.APPLICATION_JSON)
         ).andExpectAll(
@@ -147,7 +157,7 @@ class UserControllerTest {
 
         UserCredential uC = new UserCredential();
         uC.setId(UUID.randomUUID().toString());
-        uC.setEmail("rizki5@gmail.com");
+        uC.setEmail("rizki51@gmail.com");
         uC.setPassword("12345");
         UserCredential userCredential = userCredentialRepository.save(uC);
 
@@ -170,7 +180,7 @@ class UserControllerTest {
         request.setPhoneNumber("808010102020");
 
         mockMvc.perform(
-                put("/user")
+                put(ApiUrlConstant.USER)
                         .header(HttpHeaders.AUTHORIZATION,"Bearer " + ApiUrlConstant.TOKEN)
                         .accept(MediaType.APPLICATION_JSON)
                         .contentType(MediaType.APPLICATION_JSON)
@@ -184,10 +194,36 @@ class UserControllerTest {
     }
 
     @Test
+    void updateUserImageBadReq() throws Exception {
+        Random rand = new Random();
+        Long randomNumber = rand.nextLong(100);
+        Image image = new Image();
+        image.setId(randomNumber);
+        image.setName("image");
+        image.setType("png");
+        image.setImageData(new byte[]{10});
+        imageRepository.save(image);
+
+        User user = new User();
+        user.setId(UUID.randomUUID().toString());
+        userRepository.save(user);
+
+        mockMvc.perform(
+                put(ApiUrlConstant.USER)
+                        .header(HttpHeaders.AUTHORIZATION,"Bearer " + ApiUrlConstant.TOKEN)
+        ).andExpectAll(
+                status().isBadRequest()
+        );
+
+        userRepository.deleteAll();
+        imageRepository.deleteAll();
+    }
+
+    @Test
     void deleteById() throws Exception {
         UserCredential uC = new UserCredential();
         uC.setId(UUID.randomUUID().toString());
-        uC.setEmail("rizki5@gmail.com");
+        uC.setEmail("rizki51@gmail.com");
         uC.setPassword("12345");
         UserCredential userCredential = userCredentialRepository.save(uC);
 
@@ -202,7 +238,7 @@ class UserControllerTest {
         userRepository.save(user);
 
         mockMvc.perform(
-                delete("/user/"+ user.getId())
+                delete(ApiUrlConstant.USER+"/"+ user.getId())
                         .header(HttpHeaders.AUTHORIZATION,"Bearer " + ApiUrlConstant.TOKEN)
                         .contentType(MediaType.APPLICATION_JSON)
         ).andExpectAll(

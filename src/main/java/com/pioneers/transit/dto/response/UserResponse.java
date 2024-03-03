@@ -1,6 +1,7 @@
 package com.pioneers.transit.dto.response;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.pioneers.transit.entity.Image;
 import com.pioneers.transit.entity.UserCredential;
 import jakarta.persistence.OneToOne;
 import lombok.*;

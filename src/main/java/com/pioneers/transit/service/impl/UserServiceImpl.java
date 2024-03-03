@@ -3,10 +3,13 @@ package com.pioneers.transit.service.impl;
 import com.pioneers.transit.dto.request.UserRequest;
 import com.pioneers.transit.dto.response.PageResponseWrapper;
 import com.pioneers.transit.dto.response.UserResponse;
+import com.pioneers.transit.dto.response.UserResponseImage;
+import com.pioneers.transit.entity.Image;
 import com.pioneers.transit.entity.User;
 import com.pioneers.transit.entity.UserCredential;
 import com.pioneers.transit.repository.UserCredentialRepository;
 import com.pioneers.transit.repository.UserRepository;
+import com.pioneers.transit.service.ImageService;
 import com.pioneers.transit.service.UserService;
 import com.pioneers.transit.service.ValidationService;
 import com.pioneers.transit.specification.user.UserSearchDTO;
@@ -19,8 +22,11 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.server.ResponseStatusException;
 
+import java.io.IOException;
 import java.util.List;
 import java.util.Optional;
 
@@ -31,11 +37,11 @@ public class UserServiceImpl implements UserService {
     private final UserRepository userRepository;
     private final UserCredentialRepository userCredentialRepository;
     private final ValidationService validationService;
+    private final ImageService imageService;
 
     @Override
     public UserResponse create(UserRequest request) {
         validationService.validate(request);
-
         UserCredential userCredentialId = userCredentialRepository.findById(request.getUserCredential().getId())
                 .orElseThrow(()->new ResponseStatusException(HttpStatus.NOT_FOUND,"ID UserCredential Not Found"));
         User user = User.builder()
@@ -44,6 +50,7 @@ public class UserServiceImpl implements UserService {
                 .birthDate(request.getBirthDate())
                 .address(request.getAddress())
                 .phoneNumber(request.getPhoneNumber())
+                .image(null)
                 .userCredentiall(userCredentialId)
                 .build();
         userRepository.save(user);
@@ -83,10 +90,27 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    public UserResponseImage updateImage(String id, MultipartFile file) throws IOException {
+        User user = userRepository.findById(id)
+                .orElseThrow(()->new ResponseStatusException(HttpStatus.NOT_FOUND, "Id User NOT FOUND"));
+        Image image = imageService.uploadImage(file);
+        user.setImage(image);
+        userRepository.save(user);
+        return toUserResponseImage(user);
+    }
+
+    @Override
     public void deleteById(String id) {
         User user = userRepository.findById(id).orElseThrow(null);
         userRepository.delete(user);
     }
+
+    @Override
+    public byte[] getImage(String id) {
+        return imageService.getImage(id);
+    }
+
+
     private static UserResponse toUserResponse(User user){
         return UserResponse.builder()
                 .id(user.getId())
@@ -96,6 +120,15 @@ public class UserServiceImpl implements UserService {
                 .address(user.getAddress())
                 .phoneNumber(user.getPhoneNumber())
                 .userCredentiall(user.getUserCredentiall())
+                .build();
+    }
+
+    private static UserResponseImage toUserResponseImage(User user){
+        return UserResponseImage.builder()
+                .id(user.getId())
+                .imageId(user.getImage().getId())
+                .imageType(user.getImage().getType())
+                .imageName(user.getImage().getName())
                 .build();
     }
 }

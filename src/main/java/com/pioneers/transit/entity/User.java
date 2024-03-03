@@ -1,6 +1,7 @@
 package com.pioneers.transit.entity;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.*;
 import org.springframework.data.annotation.CreatedDate;
@@ -25,6 +26,10 @@ public class User {
     private Date birthDate;
     private String address;
     private String phoneNumber;
+
+    @OneToOne
+    @JsonIgnore
+    private Image image;
 
     @OneToOne
     private UserCredential userCredentiall;

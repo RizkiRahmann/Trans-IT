@@ -67,10 +67,10 @@ public class UserController {
         return ResponseEntity.status(HttpStatus.CREATED).body(response);
     }
     @PreAuthorize("hasAnyRole('SUPER_ADMIN','ADMIN')")
-    @PutMapping("{id}")
-    public ResponseEntity<?> updateImage(@PathVariable String id,
+    @PutMapping("{imageId}")
+    public ResponseEntity<?> updateImage(@PathVariable String imageId,
                                          @RequestParam(name = "image",required = false) MultipartFile file) throws IOException {
-        UserResponseImage userResponseImage = userService.updateImage(id, file);
+        UserResponseImage userResponseImage = userService.updateImage(imageId, file);
         ControllerResponse<UserResponseImage> response = buildResponse.response(userResponseImage, ConstStatus.STATUS_CREATE, entity, ConstMessage.M_UPDATE);
         return ResponseEntity.status(HttpStatus.CREATED).body(response);
     }

@@ -1,43 +1,35 @@
 package com.pioneers.transit.service.impl;
 
 import com.pioneers.transit.dto.request.HotelRequest;
+import com.pioneers.transit.dto.response.DestinationResponse;
 import com.pioneers.transit.dto.response.HotelResponse;
-import com.pioneers.transit.dto.response.HotelResponseClient;
+import com.pioneers.transit.dto.response.PageResponseWrapper;
+import com.pioneers.transit.entity.Destination;
 import com.pioneers.transit.entity.Hotel;
 import com.pioneers.transit.repository.HotelRepository;
-import com.pioneers.transit.service.HotelServiceClient;
+import com.pioneers.transit.service.HotelService;
 import com.pioneers.transit.service.ValidationService;
+import com.pioneers.transit.specification.destination.DestinationSpecification;
+import com.pioneers.transit.specification.hotel.HotelSearchDTO;
+import com.pioneers.transit.specification.hotel.HotelSpecification;
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
-import org.springframework.web.client.RestTemplate;
 import org.springframework.web.server.ResponseStatusException;
 
-import java.util.UUID;
-
-//import static com.pioneers.transit.service.impl.HotelServiceImpl.toHotelResponse;
+import java.util.List;
 
 @Service
 @RequiredArgsConstructor
-@Slf4j
-public class HotelServiceClientImpl implements HotelServiceClient {
-    private final RestTemplate restTemplate;
-
+public class HotelServiceImpl implements HotelService {
     private final HotelRepository hotelRepository;
     private final ValidationService validationService;
-    @Override
-    public HotelResponseClient get(String chkIn, String chkOut, String hotelKey) {
-        ResponseEntity<HotelResponseClient> response = restTemplate.getForEntity(
-                "https://data.xotelo.com/api/rates?chk_in="+chkIn+"&chk_out="+chkOut+"&hotel_key="+hotelKey,
-                HotelResponseClient.class
-        );
-        response.getBody().setId(UUID.randomUUID().toString());
-        return response.getBody();
-    }
 
-    @Override
+/*@Override
     public HotelResponse create(HotelRequest request) {
         validationService.validate(request);
         Hotel responseHotel = Hotel.builder()
@@ -47,10 +39,27 @@ public class HotelServiceClientImpl implements HotelServiceClient {
                 .build();
         hotelRepository.save(responseHotel);
         return toHotelResponse(responseHotel);
-    }
+    }*/
 
 
-    @Override
+    /*@Override
+    public PageResponseWrapper<HotelResponse> getAll(Pageable pageable, HotelSearchDTO hotelSearchDTO) {
+        Specification<Hotel> specification = HotelSpecification.getSpecification(hotelSearchDTO);
+        Page<Hotel> hotels = hotelRepository.findAll(specification,pageable);
+        List<HotelResponse> hotelResponses = hotels.getContent().stream()
+                .map(HotelServiceImpl::toHotelResponse).toList();
+        PageImpl<HotelResponse> responses = new PageImpl<>(hotelResponses, pageable, hotels.getTotalElements());
+        return new PageResponseWrapper<>(responses);
+
+    }*/
+
+    /*@Override
+    public HotelResponse getById(String id) {
+        Hotel hotel = hotelRepository.findById(id).orElseThrow(null);
+        return toHotelResponse(hotel);
+    }*/
+
+/*@Override
     public HotelResponse update(HotelRequest request) {
         validationService.validate(request);
         Hotel hotel = hotelRepository.findById(request.getId())
@@ -59,19 +68,21 @@ public class HotelServiceClientImpl implements HotelServiceClient {
         hotel.setName(request.getName());
         hotel.setHotel_key(request.getHotel_key());
         return create(request);
-    }
+    }*/
 
-    @Override
+
+ /*@Override
     public void delete(String id) {
         hotelRepository.deleteById(id);
-    }
+    }*/
 
 
-    private static HotelResponse toHotelResponse(Hotel hotel){
+
+    /*private static HotelResponse toHotelResponse(Hotel hotel){
         return HotelResponse.builder()
                 .id(hotel.getId())
                 .name(hotel.getName())
                 .hotel_key(hotel.getHotel_key())
                 .build();
-    }
+    }*/
 }

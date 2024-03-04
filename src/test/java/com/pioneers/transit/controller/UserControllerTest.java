@@ -74,7 +74,7 @@ class UserControllerTest {
         request.setUserCredential(userCredential);
 
         mockMvc.perform(
-                post("/user")
+                post("/user"),
 
 //        UserCredential userCredential = userCredentialRepository.findById("23cc327b-ddc6-4b31-9394-24a1e7872938")
 //                .orElseThrow(null);
@@ -105,7 +105,7 @@ class UserControllerTest {
         mockMvc.perform(
                 post("/user")
                         .header(HttpHeaders.AUTHORIZATION,"Bearer " + ApiUrlConstant.TOKEN)
->>>>>>> c698260c169fab1f8baa68244f8a07c3d76daa51
+
                         .accept(MediaType.APPLICATION_JSON)
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(json)

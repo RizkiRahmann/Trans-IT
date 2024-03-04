@@ -10,5 +10,5 @@ public interface PurchaseService {
     PageResponseWrapper<PurchaseResponse> getAll(Pageable pageable);
     PurchaseResponse getById(String id);
     PurchaseResponse update(PurchaseRequest request);
-    void delete(String id);
+//    void delete(String id);
 }

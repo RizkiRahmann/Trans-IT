@@ -5,9 +5,11 @@ import com.pioneers.transit.dto.response.LogResponse;
 import com.pioneers.transit.dto.response.PageResponseWrapper;
 import com.pioneers.transit.entity.Bus;
 import com.pioneers.transit.entity.Destination;
+import com.pioneers.transit.entity.Hotel;
 import com.pioneers.transit.entity.Log;
 import com.pioneers.transit.repository.BusRepository;
 import com.pioneers.transit.repository.DestinationRepository;
+import com.pioneers.transit.repository.HotelRepository;
 import com.pioneers.transit.repository.LogRepository;
 import com.pioneers.transit.service.LogService;
 import com.pioneers.transit.service.ValidationService;
@@ -24,10 +26,12 @@ import java.util.List;
 
 @Service
 @RequiredArgsConstructor
+@Slf4j
 public class LogServiceImpl implements LogService {
     private final LogRepository logRepository;
     private final DestinationRepository destinationRepository;
     private final BusRepository busRepository;
+    private final HotelRepository hotelRepository;
     private final ValidationService validationService;
 
     @Override
@@ -38,11 +42,13 @@ public class LogServiceImpl implements LogService {
                 .orElseThrow(()->new ResponseStatusException(HttpStatus.NOT_FOUND,"ID Destination Not Found"));
         Bus bus = busRepository.findById(request.getBus().getId())
                 .orElseThrow(()->new ResponseStatusException(HttpStatus.NOT_FOUND,"ID Bus Not Found"));
+        Hotel hotel = hotelRepository.findByName(request.getHotelName().getName())
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Hotel Name Not Found"));
+        log.info("TESTTT " + request.getHotelName().getName());
         Log log = Log.builder()
                 .ticketQuantity(request.getTicketQuantity())
                 .price(destination.getPrice()+bus.getPrice())
-                .hotelKey(request.getHotelKey())
-                .hotelUrl(request.getHotelUrl())
+                .hotelKey(hotel)
                 .purchase(request.getPurchase())
                 .destination(destination)
                 .bus(bus)
@@ -69,7 +75,6 @@ public class LogServiceImpl implements LogService {
                 .destination(log.getDestination())
                 .bus(log.getBus())
                 .hotelKey(log.getHotelKey())
-                .hotelUrl(log.getHotelUrl())
                 .build();
     }
 }

@@ -57,11 +57,11 @@ public class PurchaseController {
         ControllerResponse<PurchaseResponse> response = buildResponse.response(purchaseResponse, ConstStatus.STATUS_CREATE,entity, ConstMessage.M_UPDATE);
         return ResponseEntity.ok(response);
     }
-    @PreAuthorize("hasAnyRole('SUPER_ADMIN','ADMIN')")
-    @DeleteMapping("/{id}")
-    public ResponseEntity<?> deletePurchase(@PathVariable String id){
-        purchaseService.delete(id);
-        ControllerResponse<String> response = buildResponse.response("Data berhasil dihapus", ConstStatus.STATUS_OK,entity, ConstMessage.M_DELETE);
-        return ResponseEntity.ok(response);
-    }
+//    @PreAuthorize("hasAnyRole('SUPER_ADMIN','ADMIN')")
+//    @DeleteMapping("/{id}")
+//    public ResponseEntity<?> deletePurchase(@PathVariable String id){
+//        purchaseService.delete(id);
+//        ControllerResponse<String> response = buildResponse.response("Data berhasil dihapus", ConstStatus.STATUS_OK,entity, ConstMessage.M_DELETE);
+//        return ResponseEntity.ok(response);
+//    }
 }

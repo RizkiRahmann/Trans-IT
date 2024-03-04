@@ -67,7 +67,7 @@ public class UserController {
         return ResponseEntity.status(HttpStatus.CREATED).body(response);
     }
     @PreAuthorize("hasAnyRole('SUPER_ADMIN','ADMIN')")
-    @PutMapping("{imageId}")
+    @PutMapping("/image/{imageId}")
     public ResponseEntity<?> updateImage(@PathVariable String imageId,
                                          @RequestParam(name = "image",required = false) MultipartFile file) throws IOException {
         UserResponseImage userResponseImage = userService.updateImage(imageId, file);
@@ -84,9 +84,9 @@ public class UserController {
     }
 
     @PreAuthorize("hasAnyRole('SUPER_ADMIN','ADMIN','CUSTOMER')")
-    @GetMapping(path = "/image/{id}")
-    public ResponseEntity<?> getImage(@PathVariable String id){
-        byte[] image = userService.getImage(id);
+    @GetMapping(path = "/image/{imageId}")
+    public ResponseEntity<?> getImage(@PathVariable String imageId){
+        byte[] image = userService.getImage(imageId);
         ControllerResponse<byte[]> response = buildResponse.response(image, ConstStatus.STATUS_OK, entity, ConstMessage.M_GET);
         return ResponseEntity.ok(response);
 //        return ResponseEntity.status(HttpStatus.OK)

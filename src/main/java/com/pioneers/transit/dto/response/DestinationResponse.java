@@ -13,5 +13,5 @@ public class DestinationResponse {
     private String description;
     private String location;
     private Integer price;
-    private Long rating;
+    private Double rating;
 }

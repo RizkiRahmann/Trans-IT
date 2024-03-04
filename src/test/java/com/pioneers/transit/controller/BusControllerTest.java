@@ -40,7 +40,7 @@ class BusControllerTest {
                 """;
 
         mockMvc.perform(
-                post("/bus")
+                post(ApiUrlConstant.BUS)
                         .header(HttpHeaders.AUTHORIZATION,"Bearer " + ApiUrlConstant.TOKEN)
                         .accept(MediaType.APPLICATION_JSON)
                         .contentType(MediaType.APPLICATION_JSON)
@@ -53,7 +53,7 @@ class BusControllerTest {
     @Test
     void getAll() throws Exception {
         mockMvc.perform(
-                get("/bus")
+                get(ApiUrlConstant.BUS)
                         .header(HttpHeaders.AUTHORIZATION,"Bearer " + ApiUrlConstant.TOKEN)
                         .contentType(MediaType.APPLICATION_JSON)
         ).andExpectAll(
@@ -64,7 +64,7 @@ class BusControllerTest {
     @Test
     void getById() throws Exception {
         mockMvc.perform(
-                get("/bus/01dce3f4-a8de-4777-bb1d-21e8903ef300")
+                get(ApiUrlConstant.BUS+"/01dce3f4-a8de-4777-bb1d-21e8903ef300")
                         .header(HttpHeaders.AUTHORIZATION,"Bearer " + ApiUrlConstant.TOKEN)
                         .contentType(MediaType.APPLICATION_JSON)
         ).andExpectAll(
@@ -84,7 +84,7 @@ class BusControllerTest {
                 """.formatted(busId);
 
         mockMvc.perform(
-                put("/bus")
+                put(ApiUrlConstant.BUS)
                         .header(HttpHeaders.AUTHORIZATION,"Bearer " + ApiUrlConstant.TOKEN)
                         .accept(MediaType.APPLICATION_JSON)
                         .contentType(MediaType.APPLICATION_JSON)
@@ -97,7 +97,7 @@ class BusControllerTest {
     @Test
     void deleteBus() throws Exception {
         mockMvc.perform(
-                delete("/bus/"+ busId)
+                delete(ApiUrlConstant.BUS+"/"+ busId)
                         .header(HttpHeaders.AUTHORIZATION,"Bearer " + ApiUrlConstant.TOKEN)
                         .contentType(MediaType.APPLICATION_JSON)
         ).andExpectAll(

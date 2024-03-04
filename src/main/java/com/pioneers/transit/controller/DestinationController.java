@@ -18,6 +18,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -28,6 +29,7 @@ public class DestinationController {
     private final BuildResponse buildResponse;
     private final String entity="Destination";
 
+    @PreAuthorize("hasAnyRole('SUPER_ADMIN','ADMIN')")
     @PostMapping
     public ResponseEntity<?> createDestination(@RequestBody DestinationRequest destinationRequest){
         DestinationResponse destinationResponse = destinationService.create(destinationRequest);
@@ -35,12 +37,13 @@ public class DestinationController {
         return ResponseEntity.status(HttpStatus.CREATED).body(response);
     }
 
+    @PreAuthorize("hasAnyRole('SUPER_ADMIN','ADMIN','CUSTOMER')")
     @GetMapping()
     public ResponseEntity<?> getAll(@RequestParam(name = "page", defaultValue = "0") Integer page,
                                     @RequestParam(name = "size", defaultValue = "5") Integer size,
                                     @RequestParam(name = "sort-by", defaultValue = "name") String sortBy,
                                     @RequestParam(name = "direction", defaultValue = "ASC") String direction,
-                                    @ModelAttribute DestinationSearchDTO destinationSearchDTO){
+                                    @ModelAttribute(binding = false) DestinationSearchDTO destinationSearchDTO){
         Sort sort = Sort.by(Sort.Direction.fromString(direction), sortBy);
         Pageable pageable = PageRequest.of(page, size, sort);
         PageResponseWrapper<DestinationResponse> destinationResponses = destinationService.getAll(pageable,destinationSearchDTO);
@@ -49,6 +52,7 @@ public class DestinationController {
         return ResponseEntity.ok(response);
     }
 
+    @PreAuthorize("hasAnyRole('SUPER_ADMIN','ADMIN','CUSTOMER')")
     @GetMapping("/{id}")
     public ResponseEntity<?> getById(@PathVariable String id){
         DestinationResponse destinationResponse = destinationService.getById(id);
@@ -56,6 +60,7 @@ public class DestinationController {
         return ResponseEntity.ok(response);
     }
 
+    @PreAuthorize("hasAnyRole('SUPER_ADMIN','ADMIN')")
     @PutMapping
     public ResponseEntity<?> updateDestination(@RequestBody DestinationRequest destinationRequest){
         DestinationResponse destinationResponse = destinationService.update(destinationRequest);
@@ -63,6 +68,7 @@ public class DestinationController {
         return ResponseEntity.status(HttpStatus.CREATED).body(response);
     }
 
+    @PreAuthorize("hasAnyRole('SUPER_ADMIN','ADMIN')")
     @DeleteMapping("/{id}")
     public ResponseEntity<?> deleteById(@PathVariable String id){
         destinationService.delete(id);

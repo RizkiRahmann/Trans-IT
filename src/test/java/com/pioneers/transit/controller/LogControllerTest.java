@@ -71,7 +71,7 @@ class LogControllerTest {
 //                """.formatted(destinationId,busId);
 
         mockMvc.perform(
-                post("/log")
+                post(ApiUrlConstant.LOG)
                         .header(HttpHeaders.AUTHORIZATION,"Bearer " + ApiUrlConstant.TOKEN)
                         .accept(MediaType.APPLICATION_JSON)
                         .contentType(MediaType.APPLICATION_JSON)
@@ -84,7 +84,7 @@ class LogControllerTest {
     @Test
     void getAllLog() throws Exception {
         mockMvc.perform(
-                get("/log")
+                get(ApiUrlConstant.LOG)
                         .header(HttpHeaders.AUTHORIZATION,"Bearer " + ApiUrlConstant.TOKEN)
                         .contentType(MediaType.APPLICATION_JSON)
         ).andExpectAll(

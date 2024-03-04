@@ -21,6 +21,14 @@ public class BeanConfiguration {
         return auth.getAuthenticationManager();
     }
 
+//    @Bean
+//    public Cloudinary cloudinaryAccount(){
+//        return new Cloudinary(ObjectUtils.asMap(
+//                "cloud_name","de0yidcs5",
+//                "api_key","415953523312214",
+//                "api_secret","Y5JMq_FNpPplA8Fmtn-zn3sGfnw"
+//        ));
+//    }
     @Bean
     public RestTemplate restTemplate(){
         return new RestTemplate();

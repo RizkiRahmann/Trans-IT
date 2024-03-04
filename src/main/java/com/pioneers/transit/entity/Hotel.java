@@ -1,5 +1,6 @@
 package com.pioneers.transit.entity;
 
+
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -9,14 +10,13 @@ import lombok.*;
 @Setter
 @Entity
 @Builder
-@Table(name = "m_destination")
-public class Destination {
+@Table(name = "m_hotel")
+public class Hotel {
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
     private String id;
     private String name;
-    private String description;
-    private String location;
-    private Integer price;
-    private Double rating;
+    @Column(unique = true)
+    private String hotelKey;
+
 }

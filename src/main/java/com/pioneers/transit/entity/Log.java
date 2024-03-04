@@ -17,8 +17,10 @@ public class Log {
     private String id;
     private Integer ticketQuantity;
     private Integer price;
-    private String hotelKey;
-    private String hotelUrl;
+
+    @ManyToOne
+    @JoinColumn(name = "hotel_id")
+    private Hotel hotelKey;
 
     @ManyToOne
     @JoinColumn(name = "purchase_id")

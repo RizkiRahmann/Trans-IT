@@ -12,14 +12,13 @@ import lombok.*;
 @Table(name = "m_image")
 public class Image {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    @GeneratedValue(strategy = GenerationType.UUID)
+    private String id;
 
     private String name;
 
     private String type;
 
     @Lob
-    @Column(name = "imagedata", length = 1000000)
     private byte[] imageData;
 }

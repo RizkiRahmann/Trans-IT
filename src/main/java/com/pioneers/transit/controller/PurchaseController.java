@@ -13,6 +13,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -23,12 +24,14 @@ public class PurchaseController {
     private final BuildResponse buildResponse;
     private final String entity="Purchase";
 
+    @PreAuthorize("hasAnyRole('SUPER_ADMIN','ADMIN')")
     @PostMapping
     public ResponseEntity<?> createPurchase(@RequestBody PurchaseRequest request){
         PurchaseResponse purchaseResponse = purchaseService.create(request);
         ControllerResponse<PurchaseResponse> response = buildResponse.response(purchaseResponse, ConstStatus.STATUS_CREATE,entity, ConstMessage.M_CREATE);
         return ResponseEntity.ok(response);
     }
+    @PreAuthorize("hasAnyRole('SUPER_ADMIN','ADMIN')")
     @GetMapping
     public ResponseEntity<?> getAll(
             @RequestParam(name = "page", defaultValue = "0") Integer page,
@@ -40,22 +43,25 @@ public class PurchaseController {
                 .response(responseWrapper,ConstStatus.STATUS_OK,entity,ConstMessage.M_GET);
         return ResponseEntity.ok(response);
     }
+    @PreAuthorize("hasAnyRole('SUPER_ADMIN','ADMIN')")
     @GetMapping("/{id}")
     public ResponseEntity<?> getPurchaseById(@PathVariable String id){
         PurchaseResponse purchaseResponse = purchaseService.getById(id);
         ControllerResponse<PurchaseResponse> response = buildResponse.response(purchaseResponse, ConstStatus.STATUS_OK,entity, ConstMessage.M_GET);
         return ResponseEntity.ok(response);
     }
+    @PreAuthorize("hasAnyRole('SUPER_ADMIN','ADMIN')")
     @PutMapping
     public ResponseEntity<?> updatePurchase(@RequestBody PurchaseRequest request){
         PurchaseResponse purchaseResponse = purchaseService.update(request);
         ControllerResponse<PurchaseResponse> response = buildResponse.response(purchaseResponse, ConstStatus.STATUS_CREATE,entity, ConstMessage.M_UPDATE);
         return ResponseEntity.ok(response);
     }
-    @DeleteMapping("/{id}")
-    public ResponseEntity<?> deletePurchase(@PathVariable String id){
-        purchaseService.delete(id);
-        ControllerResponse<String> response = buildResponse.response("Data berhasil dihapus", ConstStatus.STATUS_OK,entity, ConstMessage.M_DELETE);
-        return ResponseEntity.ok(response);
-    }
+//    @PreAuthorize("hasAnyRole('SUPER_ADMIN','ADMIN')")
+//    @DeleteMapping("/{id}")
+//    public ResponseEntity<?> deletePurchase(@PathVariable String id){
+//        purchaseService.delete(id);
+//        ControllerResponse<String> response = buildResponse.response("Data berhasil dihapus", ConstStatus.STATUS_OK,entity, ConstMessage.M_DELETE);
+//        return ResponseEntity.ok(response);
+//    }
 }

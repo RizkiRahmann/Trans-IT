@@ -49,7 +49,7 @@ class AuthControllerTest {
         request.setPassword("");
 
         mockMvc.perform(
-                post(ApiUrlConstant.AUTH +"/register")
+                post(ApiUrlConstant.AUTH+"/register")
                         .accept(MediaType.APPLICATION_JSON)
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(request))
@@ -63,7 +63,7 @@ class AuthControllerTest {
         request.setPassword("12345");
 
         mockMvc.perform(
-                post(ApiUrlConstant.AUTH +"/register/admin")
+                post(ApiUrlConstant.AUTH+"/register/admin")
                         .accept(MediaType.APPLICATION_JSON)
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(request))
@@ -77,7 +77,7 @@ class AuthControllerTest {
         request.setPassword("");
 
         mockMvc.perform(
-                post(ApiUrlConstant.AUTH +"/register/admin")
+                post(ApiUrlConstant.AUTH+"/register/admin")
                         .accept(MediaType.APPLICATION_JSON)
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(request))
@@ -92,7 +92,7 @@ class AuthControllerTest {
         String body = "{\"email\":\"" + email + "\", \"password\":\"" + password + "\"}";
 
         MvcResult result = mockMvc.perform(
-                post(ApiUrlConstant.AUTH +"/login")
+                post(ApiUrlConstant.AUTH+"/login")
                         .accept(MediaType.APPLICATION_JSON)
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(body)
@@ -108,7 +108,7 @@ class AuthControllerTest {
         String body = "{\"email\":\"" + email + "\", \"password\":\"" + password + "\"}";
 
         mockMvc.perform(
-                post(ApiUrlConstant.AUTH +"/login")
+                post(ApiUrlConstant.AUTH+"/login")
                         .accept(MediaType.APPLICATION_JSON)
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(body)

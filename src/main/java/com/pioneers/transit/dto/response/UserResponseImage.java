@@ -13,7 +13,7 @@ import java.sql.Date;
 @NoArgsConstructor
 public class UserResponseImage {
     private String id;
-    private Long imageId;
+    private String imageId;
     private String imageName;
     private String imageType;
 }

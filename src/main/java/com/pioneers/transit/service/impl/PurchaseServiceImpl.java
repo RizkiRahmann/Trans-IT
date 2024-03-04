@@ -8,6 +8,7 @@ import com.pioneers.transit.dto.response.PageResponseWrapper;
 import com.pioneers.transit.dto.response.PurchaseResponse;
 import com.pioneers.transit.entity.*;
 import com.pioneers.transit.repository.BusRepository;
+import com.pioneers.transit.repository.HotelRepository;
 import com.pioneers.transit.repository.PurchaseRepository;
 import com.pioneers.transit.repository.UserRepository;
 import com.pioneers.transit.service.*;
@@ -19,6 +20,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.server.ResponseStatusException;
 
+import java.time.LocalDate;
 import java.util.List;
 
 @Service
@@ -30,7 +32,7 @@ public class PurchaseServiceImpl implements PurchaseService {
     private final UserRepository userRepository;
     private final ValidationService validationService;
     private final PaymentService paymentService;
-    private final HotelServiceClient hotelServiceClient;
+    private final HotelRepository hotelRepository;
 
     @Override
     @Transactional
@@ -39,6 +41,13 @@ public class PurchaseServiceImpl implements PurchaseService {
         Payment payment = paymentService.getOrSave(request.getPayment());
         User user = userRepository.findById(request.getUser().getId())
                 .orElseThrow(()->new ResponseStatusException(HttpStatus.NOT_FOUND,"ID User Not Found"));
+
+        LocalDate tommorow = LocalDate.now().plusDays(1);
+        LocalDate chkIn = request.getChkIn().toLocalDate();
+        LocalDate chkOut = request.getChkOut().toLocalDate();
+        if (chkIn.isBefore(tommorow)) throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Invalid Check in, at least tommorow");
+        if (chkOut.isBefore(tommorow)||chkOut.isEqual(tommorow)) throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Invalid Check out, at least 2 days from today");
+
         Purchase purchase = Purchase.builder()
                 .purchaseDate(request.getPurchaseDate())
                 .checkIn(request.getChkIn())
@@ -52,13 +61,14 @@ public class PurchaseServiceImpl implements PurchaseService {
             log.setPurchase(purchaseSave);
             Bus bus = busRepository.findById(log.getBus().getId())
                     .orElseThrow(()->new ResponseStatusException(HttpStatus.NOT_FOUND,"ID Bus Not Found"));
+            Hotel hotel = hotelRepository.findByName(log.getHotelKey().getName())
+                    .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Hotel Name Not Found"));
             if (bus.getChair() < 1 || bus.getChair()-log.getTicketQuantity()<0) throw new ResponseStatusException(HttpStatus.FORBIDDEN,"Full...");
             bus.setChair(bus.getChair()-log.getTicketQuantity());
             LogRequest logRequest = LogRequest.builder()
                     .ticketQuantity(log.getTicketQuantity())
                     .price(log.getPrice())
-                    .hotelKey(log.getHotelKey())
-                    .hotelUrl(log.getHotelUrl())
+                    .hotelName(hotel)
                     .purchase(log.getPurchase())
                     .destination(log.getDestination())
                     .bus(log.getBus())
@@ -95,10 +105,10 @@ public class PurchaseServiceImpl implements PurchaseService {
         return toResponse(purchase);
     }
 
-    @Override
-    public void delete(String id) {
-        purchaseRepository.deleteById(id);
-    }
+//    @Override
+//    public void delete(String id) {
+//        purchaseRepository.deleteById(id);
+//    }
 
 
     private static PurchaseResponse toResponse(Purchase purchase){

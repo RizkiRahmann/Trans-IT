@@ -3,6 +3,7 @@ package com.pioneers.transit.controller;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.pioneers.transit.dto.request.AuthRequest;
+import com.pioneers.transit.utils.constant.ApiUrlConstant;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -34,7 +35,7 @@ class AuthControllerTest {
         request.setPassword("12345");
 
         mockMvc.perform(
-                post("/auth/register")
+                post(ApiUrlConstant.AUTH +"/register")
                         .accept(MediaType.APPLICATION_JSON)
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(request))
@@ -48,7 +49,7 @@ class AuthControllerTest {
         request.setPassword("");
 
         mockMvc.perform(
-                post("/auth/register")
+                post(ApiUrlConstant.AUTH +"/register")
                         .accept(MediaType.APPLICATION_JSON)
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(request))
@@ -62,7 +63,7 @@ class AuthControllerTest {
         request.setPassword("12345");
 
         mockMvc.perform(
-                post("/auth/register/admin")
+                post(ApiUrlConstant.AUTH +"/register/admin")
                         .accept(MediaType.APPLICATION_JSON)
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(request))
@@ -76,7 +77,7 @@ class AuthControllerTest {
         request.setPassword("");
 
         mockMvc.perform(
-                post("/auth/register/admin")
+                post(ApiUrlConstant.AUTH +"/register/admin")
                         .accept(MediaType.APPLICATION_JSON)
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(request))
@@ -91,7 +92,7 @@ class AuthControllerTest {
         String body = "{\"email\":\"" + email + "\", \"password\":\"" + password + "\"}";
 
         MvcResult result = mockMvc.perform(
-                post("/auth/login")
+                post(ApiUrlConstant.AUTH +"/login")
                         .accept(MediaType.APPLICATION_JSON)
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(body)
@@ -107,7 +108,7 @@ class AuthControllerTest {
         String body = "{\"email\":\"" + email + "\", \"password\":\"" + password + "\"}";
 
         mockMvc.perform(
-                post("/auth/login")
+                post(ApiUrlConstant.AUTH +"/login")
                         .accept(MediaType.APPLICATION_JSON)
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(body)

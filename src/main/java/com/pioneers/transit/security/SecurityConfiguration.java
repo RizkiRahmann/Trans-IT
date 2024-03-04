@@ -27,6 +27,7 @@ public class SecurityConfiguration {
                 .authorizeHttpRequests( request ->
                         request.dispatcherTypeMatchers(DispatcherType.ERROR).permitAll()
                                 .requestMatchers(
+                                        "/v3/api-docs/auth/**",
                                         "/auth/**",
                                         "/swagger-ui/**",
                                         "/swagger-ui.html",

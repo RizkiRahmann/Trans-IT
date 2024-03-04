@@ -8,6 +8,7 @@ import com.pioneers.transit.utils.constant.ApiUrlConstant;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -22,6 +23,7 @@ public class HotelClientController {
     private final HotelServiceClient hotelServiceClient;
     private final BuildResponse buildResponse;
 
+    @PreAuthorize("hasAnyRole('SUPER_ADMIN','ADMIN','CUSTOMER')")
     @GetMapping
     public ResponseEntity<?> geHotel(
             @RequestParam(name = "chk_in") String chkIn,

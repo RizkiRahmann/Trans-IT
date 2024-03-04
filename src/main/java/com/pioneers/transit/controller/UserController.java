@@ -15,6 +15,7 @@ import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -28,6 +29,7 @@ public class UserController {
     private final BuildResponse buildResponse;
     private String entity = "User";
 
+    @PreAuthorize("hasAnyRole('SUPER_ADMIN','ADMIN')")
     @PostMapping
     public ResponseEntity<?> createUser(@RequestBody UserRequest request){
         UserResponse userResponse = userService.create(request);
@@ -35,6 +37,7 @@ public class UserController {
         return ResponseEntity.status(HttpStatus.CREATED).body(response);
     }
 
+    @PreAuthorize("hasAnyRole('SUPER_ADMIN','ADMIN','CUSTOMER')")
     @GetMapping
     public ResponseEntity<?> getAll(@RequestParam(name = "page", defaultValue = "0") Integer page,
                                     @RequestParam(name = "size", defaultValue = "5") Integer size,
@@ -48,6 +51,7 @@ public class UserController {
         return ResponseEntity.ok(response);
     }
 
+    @PreAuthorize("hasAnyRole('SUPER_ADMIN','ADMIN','CUSTOMER')")
     @GetMapping(path = "/{id}")
     public ResponseEntity<?> getById(@PathVariable String id){
         UserResponse userServiceById = userService.getById(id);
@@ -55,12 +59,14 @@ public class UserController {
         return ResponseEntity.ok(response);
     }
 
+    @PreAuthorize("hasAnyRole('SUPER_ADMIN','ADMIN')")
     @PutMapping
     public ResponseEntity<?> updateUser(@RequestBody UserRequest request){
         UserResponse userResponse = userService.update(request);
         ControllerResponse<UserResponse> response = buildResponse.response(userResponse, ConstStatus.STATUS_CREATE, entity, ConstMessage.M_UPDATE);
         return ResponseEntity.status(HttpStatus.CREATED).body(response);
     }
+    @PreAuthorize("hasAnyRole('SUPER_ADMIN','ADMIN')")
     @PutMapping("{id}")
     public ResponseEntity<?> updateImage(@PathVariable String id,
                                          @RequestParam(name = "image",required = false) MultipartFile file) throws IOException {
@@ -69,6 +75,7 @@ public class UserController {
         return ResponseEntity.status(HttpStatus.CREATED).body(response);
     }
 
+    @PreAuthorize("hasAnyRole('SUPER_ADMIN','ADMIN')")
     @DeleteMapping(path = "/{id}")
     public ResponseEntity<?> deleteById(@PathVariable String id){
         userService.deleteById(id);
@@ -76,6 +83,7 @@ public class UserController {
         return ResponseEntity.ok(response);
     }
 
+    @PreAuthorize("hasAnyRole('SUPER_ADMIN','ADMIN','CUSTOMER')")
     @GetMapping(path = "/image/{id}")
     public ResponseEntity<?> getImage(@PathVariable String id){
         byte[] image = userService.getImage(id);

@@ -16,6 +16,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -26,6 +27,7 @@ public class BusController {
     private final BuildResponse buildResponse;
     private final String entity="Bus";
 
+    @PreAuthorize("hasAnyRole('SUPER_ADMIN','ADMIN')")
     @PostMapping
     public ResponseEntity<?> createBus(@RequestBody BusRequest busRequest){
         BusResponse busResponse = busService.create(busRequest);
@@ -33,6 +35,7 @@ public class BusController {
         return ResponseEntity.status(HttpStatus.CREATED).body(response);
     }
 
+    @PreAuthorize("hasAnyRole('SUPER_ADMIN','ADMIN','CUSTOMER')")
     @GetMapping
     public ResponseEntity<?> getAll(
             @RequestParam(name = "page", defaultValue = "0") Integer page,
@@ -48,6 +51,7 @@ public class BusController {
         return ResponseEntity.ok(response);
     }
 
+    @PreAuthorize("hasAnyRole('SUPER_ADMIN','ADMIN','CUSTOMER')")
     @GetMapping("/{id}")
     public ResponseEntity<?> getById(@PathVariable String id){
         BusResponse busResponse = busService.getById(id);
@@ -55,6 +59,7 @@ public class BusController {
         return ResponseEntity.ok(response);
     }
 
+    @PreAuthorize("hasAnyRole('SUPER_ADMIN','ADMIN')")
     @PutMapping
     public ResponseEntity<?> updateBus(@RequestBody BusRequest busRequest){
         BusResponse busResponse = busService.update(busRequest);
@@ -62,6 +67,7 @@ public class BusController {
         return ResponseEntity.status(HttpStatus.CREATED).body(response);
     }
 
+    @PreAuthorize("hasAnyRole('SUPER_ADMIN','ADMIN')")
     @DeleteMapping("/{id}")
     public ResponseEntity<?> deleteBus(@PathVariable String id){
         busService.delete(id);

@@ -24,7 +24,7 @@ class HotelClientControllerTest {
     @Test
     void geHotel() throws Exception {
         mockMvc.perform(
-                get("/hotel")
+                get(ApiUrlConstant.HOTEL)
                         .header(HttpHeaders.AUTHORIZATION,"Bearer " + ApiUrlConstant.TOKEN)
                         .param("chk_in", "2024-01-01")
                         .param("chk_out", "2024-02-01")

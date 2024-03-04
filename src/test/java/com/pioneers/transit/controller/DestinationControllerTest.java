@@ -35,7 +35,7 @@ class DestinationControllerTest {
                 """;
 
         mockMvc.perform(
-                post("/destination")
+                post(ApiUrlConstant.DESTINATION)
                         .header(HttpHeaders.AUTHORIZATION,"Bearer " + ApiUrlConstant.TOKEN)
                         .accept(MediaType.APPLICATION_JSON)
                         .contentType(MediaType.APPLICATION_JSON)
@@ -48,7 +48,7 @@ class DestinationControllerTest {
     @Test
     void getAll() throws Exception {
         mockMvc.perform(
-                get("/destination")
+                get(ApiUrlConstant.DESTINATION)
                         .header(HttpHeaders.AUTHORIZATION,"Bearer " + ApiUrlConstant.TOKEN)
                         .contentType(MediaType.APPLICATION_JSON)
         ).andExpectAll(
@@ -59,7 +59,7 @@ class DestinationControllerTest {
     @Test
     void getById() throws Exception {
         mockMvc.perform(
-                get("/destination/225a31de-d3bd-4c80-957f-5f743ba281ca")
+                get(ApiUrlConstant.DESTINATION+"/225a31de-d3bd-4c80-957f-5f743ba281ca")
                         .header(HttpHeaders.AUTHORIZATION,"Bearer " + ApiUrlConstant.TOKEN)
                         .contentType(MediaType.APPLICATION_JSON)
         ).andExpectAll(
@@ -81,7 +81,7 @@ class DestinationControllerTest {
                 """.formatted(destinationId);
 
         mockMvc.perform(
-                put("/destination")
+                put(ApiUrlConstant.DESTINATION)
                         .header(HttpHeaders.AUTHORIZATION,"Bearer " + ApiUrlConstant.TOKEN)
                         .accept(MediaType.APPLICATION_JSON)
                         .contentType(MediaType.APPLICATION_JSON)
@@ -94,7 +94,7 @@ class DestinationControllerTest {
     @Test
     void deleteById() throws Exception {
         mockMvc.perform(
-                delete("/destination/"+ destinationId)
+                delete(ApiUrlConstant.DESTINATION+"/"+ destinationId)
                         .header(HttpHeaders.AUTHORIZATION,"Bearer " + ApiUrlConstant.TOKEN)
                         .contentType(MediaType.APPLICATION_JSON)
         ).andExpectAll(

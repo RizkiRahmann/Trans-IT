@@ -58,7 +58,7 @@ class PurchaseControllerTest {
                 }
                 """.formatted(userId,destinationId,busId);
         mockMvc.perform(
-                post("/purchase")
+                post(ApiUrlConstant.PURCHASE)
                         .header(HttpHeaders.AUTHORIZATION,"Bearer " + ApiUrlConstant.TOKEN)
                         .accept(MediaType.APPLICATION_JSON)
                         .contentType(MediaType.APPLICATION_JSON)
@@ -71,7 +71,7 @@ class PurchaseControllerTest {
     @Test
     void getAll() throws Exception {
         mockMvc.perform(
-                get("/purchase")
+                get(ApiUrlConstant.PURCHASE)
                         .header(HttpHeaders.AUTHORIZATION,"Bearer " + ApiUrlConstant.TOKEN)
                         .contentType(MediaType.APPLICATION_JSON)
         ).andExpectAll(
@@ -82,7 +82,7 @@ class PurchaseControllerTest {
     @Test
     void getPurchaseById() throws Exception {
         mockMvc.perform(
-                get("/purchase/c4e42287-6199-4f3d-a3d5-5b532494781d")
+                get(ApiUrlConstant.PURCHASE+"/c4e42287-6199-4f3d-a3d5-5b532494781d")
                         .header(HttpHeaders.AUTHORIZATION,"Bearer " + ApiUrlConstant.TOKEN)
                         .contentType(MediaType.APPLICATION_JSON)
         ).andExpectAll(
@@ -100,7 +100,7 @@ class PurchaseControllerTest {
                 }
                 """.formatted(purchaseId);
         mockMvc.perform(
-                put("/purchase")
+                put(ApiUrlConstant.PURCHASE)
                         .header(HttpHeaders.AUTHORIZATION,"Bearer " + ApiUrlConstant.TOKEN)
                         .accept(MediaType.APPLICATION_JSON)
                         .contentType(MediaType.APPLICATION_JSON)
@@ -114,7 +114,7 @@ class PurchaseControllerTest {
     void deletePurchase() throws Exception {
         logRepository.deleteById(logId);
         mockMvc.perform(
-                delete("/purchase/"+ purchaseId)
+                delete(ApiUrlConstant.PURCHASE+"/"+purchaseId)
                         .header(HttpHeaders.AUTHORIZATION,"Bearer " + ApiUrlConstant.TOKEN)
                         .contentType(MediaType.APPLICATION_JSON)
         ).andExpectAll(

@@ -14,6 +14,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -24,6 +25,7 @@ public class LogController {
     private final BuildResponse buildResponse;
     private final String entity="log";
 
+    @PreAuthorize("hasAnyRole('SUPER_ADMIN','ADMIN')")
     @PostMapping
     public ResponseEntity<?> saveLog(@RequestBody LogRequest logRequest){
         LogResponse logResponse = logService.saveLog(logRequest);
@@ -31,6 +33,7 @@ public class LogController {
         return ResponseEntity.ok(response);
     }
 
+    @PreAuthorize("hasAnyRole('SUPER_ADMIN','ADMIN')")
     @GetMapping
     public ResponseEntity<?> getAllLog(
             @RequestParam(name = "page", defaultValue = "0") Integer page,

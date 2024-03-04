@@ -195,14 +195,14 @@ class UserControllerTest {
 
     @Test
     void updateUserImageBadReq() throws Exception {
-        Random rand = new Random();
-        Long randomNumber = rand.nextLong(100);
-        Image image = new Image();
-        image.setId(randomNumber);
-        image.setName("image");
-        image.setType("png");
-        image.setImageData(new byte[]{10});
-        imageRepository.save(image);
+//        Random rand = new Random();
+//        Long randomNumber = rand.nextLong(100);
+//        Image image = new Image();
+//        image.setId(randomNumber);
+//        image.setName("image");
+//        image.setType("png");
+//        image.setImageData(new byte[]{10});
+//        imageRepository.save(image);
 
         User user = new User();
         user.setId(UUID.randomUUID().toString());

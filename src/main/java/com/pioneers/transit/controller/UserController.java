@@ -43,7 +43,7 @@ public class UserController {
                                     @RequestParam(name = "size", defaultValue = "5") Integer size,
                                     @RequestParam(name = "sort-by", defaultValue = "name") String sortBy,
                                     @RequestParam(name = "direction", defaultValue = "ASC") String direction,
-                                    @ModelAttribute UserSearchDTO userSearchDTO){
+                                    @ModelAttribute(binding = false) UserSearchDTO userSearchDTO){
         Sort sort = Sort.by(Sort.Direction.fromString(direction), sortBy);
         PageRequest pageRequest = PageRequest.of(page, size, sort);
         PageResponseWrapper<UserResponse> userResponsePageResponseWrapper = userService.getAll(pageRequest,userSearchDTO);
@@ -67,10 +67,13 @@ public class UserController {
         return ResponseEntity.status(HttpStatus.CREATED).body(response);
     }
     @PreAuthorize("hasAnyRole('SUPER_ADMIN','ADMIN')")
-    @PutMapping("/image/{imageId}")
-    public ResponseEntity<?> updateImage(@PathVariable String imageId,
+    @PutMapping(path = "/image/{userId}",
+            consumes = MediaType.MULTIPART_FORM_DATA_VALUE,
+            produces = MediaType.APPLICATION_JSON_VALUE
+    )
+    public ResponseEntity<?> updateImage(@PathVariable String userId,
                                          @RequestParam(name = "image",required = false) MultipartFile file) throws IOException {
-        UserResponseImage userResponseImage = userService.updateImage(imageId, file);
+        UserResponseImage userResponseImage = userService.updateImage(userId, file);
         ControllerResponse<UserResponseImage> response = buildResponse.response(userResponseImage, ConstStatus.STATUS_CREATE, entity, ConstMessage.M_UPDATE);
         return ResponseEntity.status(HttpStatus.CREATED).body(response);
     }
@@ -87,9 +90,9 @@ public class UserController {
     @GetMapping(path = "/image/{imageId}")
     public ResponseEntity<?> getImage(@PathVariable String imageId){
         byte[] image = userService.getImage(imageId);
-        ControllerResponse<byte[]> response = buildResponse.response(image, ConstStatus.STATUS_OK, entity, ConstMessage.M_GET);
-        return ResponseEntity.ok(response);
-//        return ResponseEntity.status(HttpStatus.OK)
-//                .body(image);
+//        ControllerResponse<byte[]> response = buildResponse.response(image, ConstStatus.STATUS_OK, entity, ConstMessage.M_GET);
+//        return ResponseEntity.ok(response);
+        return ResponseEntity.status(HttpStatus.OK)
+                .body(image);
     }
 }

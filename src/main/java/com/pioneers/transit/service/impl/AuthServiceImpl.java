@@ -96,6 +96,7 @@ public class AuthServiceImpl implements AuthService {
     private static UserCredentialResponse toUserReponse(UserCredential userCredential){
         List<String> roles = userCredential.getRoles().stream().map(role -> role.getRole().name()).toList();
         return UserCredentialResponse.builder()
+                .id(userCredential.getId())
                 .email(userCredential.getEmail())
                 .roles(roles)
                 .build();

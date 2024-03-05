@@ -14,7 +14,7 @@ FROM openjdk:17-jdk-alpine
 WORKDIR /app
 
 # Copy the built jar file from the build stage
-COPY --from=build /app/target/Trans-IT-0.0.1-SNAPSHOT.jar transIT.jar
+COPY --from=build /app/target/Trans-IT-0.0.1-SNAPSHOT.jar trans-it.jar
 
 # Command to run the application
-CMD ["java", "-jar", "transIT.jar"]
+CMD ["java", "-jar", "trans-it.jar"]

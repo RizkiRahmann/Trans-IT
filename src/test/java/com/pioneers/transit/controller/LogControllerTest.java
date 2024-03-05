@@ -50,8 +50,6 @@ class LogControllerTest {
         Bus bus = busRepository.findById(busId).orElseThrow(null);
         LogRequest request = new LogRequest();
         request.setTicketQuantity(1);
-        request.setHotelKey("g303536-d13871137");
-        request.setHotelUrl("URL");
         request.setDestination(destination);
         request.setBus(bus);
         String json = objectMapper.writeValueAsString(request);

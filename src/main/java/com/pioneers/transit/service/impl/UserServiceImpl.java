@@ -45,8 +45,8 @@ public class UserServiceImpl implements UserService {
     @Override
     public UserResponse create(UserRequest request) {
         validationService.validate(request);
-        UserCredential userCredentialId = userCredentialRepository.findById(request.getUserCredential().getId())
-                .orElseThrow(()->new ResponseStatusException(HttpStatus.NOT_FOUND,"ID UserCredential Not Found"));
+        UserCredential userCredentialId = userCredentialRepository.findByEmail(request.getUserCredential().getEmail())
+                .orElseThrow(()->new ResponseStatusException(HttpStatus.NOT_FOUND,"Email Not Found"));
         User user = User.builder()
                 .username(request.getUsername())
                 .name(request.getName())

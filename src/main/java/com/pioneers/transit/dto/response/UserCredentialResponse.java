@@ -10,6 +10,7 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 public class UserCredentialResponse {
+    private String id;
     private String email;
     private List<String> roles;
 }

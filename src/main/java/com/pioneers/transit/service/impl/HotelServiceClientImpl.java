@@ -38,6 +38,7 @@ public class HotelServiceClientImpl implements HotelServiceClient {
                 baseUrl.formatted(chkIn,chkOut,hotelKey),
                 HotelResponseClient.class
         );
+        if (response.getBody().getResult()==null) throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Hotel key not found");
         return response.getBody();
     }
 
@@ -49,6 +50,7 @@ public class HotelServiceClientImpl implements HotelServiceClient {
                 baseUrl.formatted(tommorow,tommorowAgain,hotelKey),
                 HotelResponseClient.class
         );
+        if (response.getBody().getResult()==null) throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Hotel key not found");
         return response.getBody();
     }
 

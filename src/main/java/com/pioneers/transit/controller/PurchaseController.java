@@ -24,7 +24,7 @@ public class PurchaseController {
     private final BuildResponse buildResponse;
     private final String entity="Purchase";
 
-    @PreAuthorize("hasAnyRole('SUPER_ADMIN','ADMIN')")
+    @PreAuthorize("hasAnyRole('SUPER_ADMIN','ADMIN','CUSTOMER')")
     @PostMapping
     public ResponseEntity<?> createPurchase(@RequestBody PurchaseRequest request){
         PurchaseResponse purchaseResponse = purchaseService.create(request);
@@ -43,7 +43,7 @@ public class PurchaseController {
                 .response(responseWrapper,ConstStatus.STATUS_OK,entity,ConstMessage.M_GET);
         return ResponseEntity.ok(response);
     }
-    @PreAuthorize("hasAnyRole('SUPER_ADMIN','ADMIN')")
+    @PreAuthorize("hasAnyRole('SUPER_ADMIN','ADMIN','CUSTOMER')")
     @GetMapping("/{id}")
     public ResponseEntity<?> getPurchaseById(@PathVariable String id){
         PurchaseResponse purchaseResponse = purchaseService.getById(id);

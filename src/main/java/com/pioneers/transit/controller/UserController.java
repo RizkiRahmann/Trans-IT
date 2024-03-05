@@ -29,7 +29,7 @@ public class UserController {
     private final BuildResponse buildResponse;
     private String entity = "User";
 
-    @PreAuthorize("hasAnyRole('SUPER_ADMIN','ADMIN')")
+    @PreAuthorize("hasAnyRole('SUPER_ADMIN','ADMIN','CUSTOMER')")
     @PostMapping
     public ResponseEntity<?> createUser(@RequestBody UserRequest request){
         UserResponse userResponse = userService.create(request);
@@ -37,7 +37,7 @@ public class UserController {
         return ResponseEntity.status(HttpStatus.CREATED).body(response);
     }
 
-    @PreAuthorize("hasAnyRole('SUPER_ADMIN','ADMIN','CUSTOMER')")
+    @PreAuthorize("hasAnyRole('SUPER_ADMIN','ADMIN')")
     @GetMapping
     public ResponseEntity<?> getAll(@RequestParam(name = "page", defaultValue = "0") Integer page,
                                     @RequestParam(name = "size", defaultValue = "5") Integer size,
@@ -59,14 +59,14 @@ public class UserController {
         return ResponseEntity.ok(response);
     }
 
-    @PreAuthorize("hasAnyRole('SUPER_ADMIN','ADMIN')")
+    @PreAuthorize("hasAnyRole('SUPER_ADMIN','ADMIN','CUSTOMER')")
     @PutMapping
     public ResponseEntity<?> updateUser(@RequestBody UserRequest request){
         UserResponse userResponse = userService.update(request);
         ControllerResponse<UserResponse> response = buildResponse.response(userResponse, ConstStatus.STATUS_CREATE, entity, ConstMessage.M_UPDATE);
         return ResponseEntity.status(HttpStatus.CREATED).body(response);
     }
-    @PreAuthorize("hasAnyRole('SUPER_ADMIN','ADMIN')")
+    @PreAuthorize("hasAnyRole('SUPER_ADMIN','ADMIN','CUSTOMER')")
     @PutMapping(path = "/image/{userId}",
             consumes = MediaType.MULTIPART_FORM_DATA_VALUE,
             produces = MediaType.APPLICATION_JSON_VALUE

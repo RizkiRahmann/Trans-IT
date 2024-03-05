@@ -11,6 +11,7 @@ import com.pioneers.transit.repository.BusRepository;
 import com.pioneers.transit.repository.DestinationRepository;
 import com.pioneers.transit.repository.HotelRepository;
 import com.pioneers.transit.repository.LogRepository;
+import com.pioneers.transit.service.HotelServiceClient;
 import com.pioneers.transit.service.LogService;
 import com.pioneers.transit.service.ValidationService;
 import lombok.RequiredArgsConstructor;
@@ -33,6 +34,7 @@ public class LogServiceImpl implements LogService {
     private final BusRepository busRepository;
     private final HotelRepository hotelRepository;
     private final ValidationService validationService;
+    private final HotelServiceClient hotelServiceClient;
 
     @Override
     @Transactional
@@ -42,13 +44,13 @@ public class LogServiceImpl implements LogService {
                 .orElseThrow(()->new ResponseStatusException(HttpStatus.NOT_FOUND,"ID Destination Not Found"));
         Bus bus = busRepository.findById(request.getBus().getId())
                 .orElseThrow(()->new ResponseStatusException(HttpStatus.NOT_FOUND,"ID Bus Not Found"));
-        Hotel hotel = hotelRepository.findByName(request.getHotelName().getName())
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Hotel Name Not Found"));
-        log.info("TESTTT " + request.getHotelName().getName());
+        Hotel hotel = hotelServiceClient.getOrSave(request.getHotel().getHotelKey());
+//        Hotel hotel = hotelRepository.findByName(request.getHotel().getName())
+//                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Hotel Name Not Found"));
         Log log = Log.builder()
                 .ticketQuantity(request.getTicketQuantity())
                 .price(destination.getPrice()+bus.getPrice())
-                .hotelKey(hotel)
+                .hotel(hotel)
                 .purchase(request.getPurchase())
                 .destination(destination)
                 .bus(bus)
@@ -74,7 +76,8 @@ public class LogServiceImpl implements LogService {
                 .purchase(log.getPurchase())
                 .destination(log.getDestination())
                 .bus(log.getBus())
-                .hotelKey(log.getHotelKey())
+                .hotel(log.getHotel())
                 .build();
     }
+
 }

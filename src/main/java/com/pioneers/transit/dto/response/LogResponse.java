@@ -15,7 +15,7 @@ public class LogResponse {
     private String id;
     private Integer ticketQuantity;
     private Integer price;
-    private Hotel hotelKey;
+    private Hotel hotel;
 
     private Purchase purchase;
     private Destination destination;

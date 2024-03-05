@@ -2,8 +2,6 @@ package com.pioneers.transit.service.impl;
 
 import com.pioneers.transit.dto.request.LogRequest;
 import com.pioneers.transit.dto.request.PurchaseRequest;
-import com.pioneers.transit.dto.response.BusResponse;
-import com.pioneers.transit.dto.response.HotelResponseClient;
 import com.pioneers.transit.dto.response.PageResponseWrapper;
 import com.pioneers.transit.dto.response.PurchaseResponse;
 import com.pioneers.transit.entity.*;
@@ -61,14 +59,12 @@ public class PurchaseServiceImpl implements PurchaseService {
             log.setPurchase(purchaseSave);
             Bus bus = busRepository.findById(log.getBus().getId())
                     .orElseThrow(()->new ResponseStatusException(HttpStatus.NOT_FOUND,"ID Bus Not Found"));
-            Hotel hotel = hotelRepository.findByName(log.getHotelKey().getName())
-                    .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Hotel Name Not Found"));
             if (bus.getChair() < 1 || bus.getChair()-log.getTicketQuantity()<0) throw new ResponseStatusException(HttpStatus.FORBIDDEN,"Full...");
             bus.setChair(bus.getChair()-log.getTicketQuantity());
             LogRequest logRequest = LogRequest.builder()
                     .ticketQuantity(log.getTicketQuantity())
                     .price(log.getPrice())
-                    .hotelName(hotel)
+                    .hotel(log.getHotel())
                     .purchase(log.getPurchase())
                     .destination(log.getDestination())
                     .bus(log.getBus())

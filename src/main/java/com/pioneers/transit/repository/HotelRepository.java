@@ -8,4 +8,5 @@ import java.util.Optional;
 
 public interface HotelRepository extends JpaRepository<Hotel, String>, JpaSpecificationExecutor<Hotel> {
     Optional<Hotel> findByName(String name);
+    Optional<Hotel> findByHotelKey(String hotelKey);
 }

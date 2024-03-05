@@ -20,7 +20,7 @@ public class Log {
 
     @ManyToOne
     @JoinColumn(name = "hotel_id")
-    private Hotel hotelKey;
+    private Hotel hotel;
 
     @ManyToOne
     @JoinColumn(name = "purchase_id")

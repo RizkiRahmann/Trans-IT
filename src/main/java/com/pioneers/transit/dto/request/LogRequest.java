@@ -1,12 +1,10 @@
 package com.pioneers.transit.dto.request;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.pioneers.transit.entity.Bus;
 import com.pioneers.transit.entity.Destination;
 import com.pioneers.transit.entity.Hotel;
 import com.pioneers.transit.entity.Purchase;
 import jakarta.validation.constraints.Min;
-import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import lombok.*;
@@ -25,7 +23,7 @@ public class LogRequest {
     @Min(value = 0)
     private Integer price;
 
-    private Hotel hotelName;
+    private Hotel hotel;
 
     private Purchase purchase;
     private Destination destination;

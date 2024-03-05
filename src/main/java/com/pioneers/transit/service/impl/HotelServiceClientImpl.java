@@ -18,6 +18,7 @@ import org.springframework.web.client.RestTemplate;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.time.LocalDate;
+import java.util.Random;
 import java.util.UUID;
 
 //import static com.pioneers.transit.service.impl.HotelServiceImpl.toHotelResponse;
@@ -64,6 +65,21 @@ public class HotelServiceClientImpl implements HotelServiceClient {
         return toHotelResponse(responseHotel);
     }
 
+    @Override
+    public Hotel getOrSave(String hotelKey) {
+        HotelResponseClient hotelResponseClient = getByHotelKey(hotelKey);
+        if (hotelResponseClient.getResult()==null) throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Hotel key not found");
+        Hotel hotel = hotelRepository.findByHotelKey(hotelKey).orElse(null);
+        if (hotel!=null) return hotel;
+        String hotelName = generateAndPrintRandomHotelName();
+        Hotel responseHotel = Hotel.builder()
+                .name(hotelName)
+                .hotelKey(hotelKey)
+                .build();
+        hotelRepository.save(responseHotel);
+        return responseHotel;
+    }
+
 
     @Override
     public HotelResponse update(HotelRequest request) {
@@ -87,5 +103,16 @@ public class HotelServiceClientImpl implements HotelServiceClient {
                 .name(hotel.getName())
                 .hotelKey(hotel.getHotelKey())
                 .build();
+    }
+
+    private String generateAndPrintRandomHotelName() {
+        String[] ADJECTIVES = {"Grand", "Royal", "Luxury", "Cozy", "Elegant", "Charming"};
+        String[] NOUNS = {"Palace", "Manor", "Resort", "Lodge", "Inn", "Retreat"};
+        Random random = new Random();
+
+        String adjective = ADJECTIVES[random.nextInt(ADJECTIVES.length)];
+        String noun = NOUNS[random.nextInt(NOUNS.length)];
+        String hotelName = adjective + " " + noun;
+        return hotelName;
     }
 }

@@ -42,7 +42,7 @@ public class BusController {
             @RequestParam(name = "size", defaultValue = "5") Integer size,
             @RequestParam(name = "sort-by", defaultValue = "name") String sortBy,
             @RequestParam(name = "direction", defaultValue = "ASC") String direction,
-            @ModelAttribute(binding = false) BusSearchDTO busSearchDTO){
+            @ModelAttribute BusSearchDTO busSearchDTO){
         Sort sort = Sort.by(Sort.Direction.fromString(direction),sortBy);
         PageRequest pageRequest = PageRequest.of(page, size, sort);
         PageResponseWrapper<BusResponse> responseWrapper  = busService.getAll(pageRequest,busSearchDTO);

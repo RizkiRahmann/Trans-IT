@@ -43,7 +43,7 @@ public class DestinationController {
                                     @RequestParam(name = "size", defaultValue = "5") Integer size,
                                     @RequestParam(name = "sort-by", defaultValue = "name") String sortBy,
                                     @RequestParam(name = "direction", defaultValue = "ASC") String direction,
-                                    @ModelAttribute(binding = false) DestinationSearchDTO destinationSearchDTO){
+                                    @ModelAttribute DestinationSearchDTO destinationSearchDTO){
         Sort sort = Sort.by(Sort.Direction.fromString(direction), sortBy);
         Pageable pageable = PageRequest.of(page, size, sort);
         PageResponseWrapper<DestinationResponse> destinationResponses = destinationService.getAll(pageable,destinationSearchDTO);

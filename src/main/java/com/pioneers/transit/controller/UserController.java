@@ -43,7 +43,7 @@ public class UserController {
                                     @RequestParam(name = "size", defaultValue = "5") Integer size,
                                     @RequestParam(name = "sort-by", defaultValue = "name") String sortBy,
                                     @RequestParam(name = "direction", defaultValue = "ASC") String direction,
-                                    @ModelAttribute(binding = false) UserSearchDTO userSearchDTO){
+                                    @ModelAttribute UserSearchDTO userSearchDTO){
         Sort sort = Sort.by(Sort.Direction.fromString(direction), sortBy);
         PageRequest pageRequest = PageRequest.of(page, size, sort);
         PageResponseWrapper<UserResponse> userResponsePageResponseWrapper = userService.getAll(pageRequest,userSearchDTO);
